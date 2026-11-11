@@ -1,0 +1,10 @@
+invariants:
+  - id: I18N-INV-001
+    title: Locale key parity
+    kind: CONFIRMED_INVARIANT
+    epistemic_status: CONFIRMED
+    statement: de-DE and en-US keys and ICU placeholders must match.
+    evidence:
+      - I18N-EVID-001
+    source_paths:
+      - standards/I18N.md

@@ -1,0 +1,18 @@
+version: "1.0"
+module: i18n
+id_prefix: I18N-
+node_types:
+  - domain
+  - data
+  - pipeline
+  - invariant
+  - evidence
+  - function
+epistemic_status_values:
+  - CONFIRMED
+  - INFERRED
+  - UNKNOWN
+relation_types:
+  - governs
+  - validates
+  - derives_from

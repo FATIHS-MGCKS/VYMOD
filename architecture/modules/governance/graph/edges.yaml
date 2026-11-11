@@ -1,0 +1,19 @@
+edges:
+  - from: GOV-PIPE-001
+    relation: invokes
+    to: GOV-FN-001
+  - from: GOV-PIPE-001
+    relation: validates
+    to: GOV-DOM-001
+  - from: GOV-INV-001
+    relation: protects
+    to: GOV-DOM-001
+  - from: GOV-EVID-001
+    relation: validates
+    to: GOV-PIPE-001
+  - from: GOV-EVID-002
+    relation: validates
+    to: GOV-PIPE-001
+  - from: GOV-DOM-001
+    relation: derives_from
+    to: GOV-INV-001
