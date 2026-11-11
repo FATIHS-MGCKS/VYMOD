@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 
 import DashboardScreen from '../../app/(app)/(tabs)/index';
@@ -31,17 +31,17 @@ jest.mock('expo-router', () => {
 });
 
 describe('VYMOD mobile P1 components', () => {
-  it('renders welcome screen', () => {
-    render(
+  it('renders welcome screen', async () => {
+    const view = await render(
       <TestProviders locale="en-US">
         <WelcomeScreen />
       </TestProviders>,
     );
-    expect(screen.getByText('Welcome to VYMOD')).toBeTruthy();
+    expect(view.getByText('Welcome to VYMOD')).toBeTruthy();
   });
 
   it('switches language from the welcome screen control', async () => {
-    const view = render(
+    const view = await render(
       <TestProviders locale="en-US">
         <WelcomeScreen />
       </TestProviders>,
@@ -59,7 +59,7 @@ describe('VYMOD mobile P1 components', () => {
   });
 
   it('rejects empty sign-up submission', async () => {
-    const view = render(
+    const view = await render(
       <TestProviders locale="en-US">
         <SignUpScreen />
       </TestProviders>,
@@ -70,17 +70,17 @@ describe('VYMOD mobile P1 components', () => {
     });
   });
 
-  it('ACTIVE mock state displays demo dashboard', () => {
-    render(
+  it('ACTIVE mock state displays demo dashboard', async () => {
+    const view = await render(
       <TestProviders session={sessionFixtures.active()} locale="en-US">
         <DashboardScreen />
       </TestProviders>,
     );
-    expect(screen.getByText('DEMO')).toBeTruthy();
+    expect(view.getByText('DEMO')).toBeTruthy();
   });
 
-  it('SUSPENDED shows restricted profile copy', () => {
-    const view = render(
+  it('SUSPENDED shows restricted profile copy', async () => {
+    const view = await render(
       <TestProviders session={sessionFixtures.suspended()} locale="en-US">
         <ProfileScreen />
       </TestProviders>,
@@ -107,8 +107,8 @@ describe('VYMOD mobile P1 components', () => {
     expect(Object.keys(CATALOGS['en-US']).sort()).toEqual(Object.keys(CATALOGS['de-DE']).sort());
   });
 
-  it('security controls are unavailable', () => {
-    const view = render(
+  it('security controls are unavailable', async () => {
+    const view = await render(
       <TestProviders session={sessionFixtures.active()} locale="en-US">
         <SecurityScreen />
       </TestProviders>,
