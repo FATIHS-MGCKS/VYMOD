@@ -32,7 +32,7 @@ VYMOD is the **consumer experience layer**. **SYNQDRIVE Core** remains authorita
 
 **P0 actual:** `governance` and `i18n` modules ACTIVE in repo; API and integrations **PLANNED** (inventory only).
 
-**P1 actual:** `client-mobile` scaffold under `apps/mobile/` (Expo SDK 58, mock session/entitlement, root-catalog i18n runtime). Production vehicle/auth APIs remain **PLANNED**.
+**P1 actual:** `client-mobile` scaffold under `apps/mobile/` (Expo SDK 58, mock session/entitlement, root-catalog i18n runtime). **Expo Router screens live only in `apps/mobile/app/`** — never `src/app/` (Expo prefers `src/app` when present). Policy/providers live under `src/navigation/` and `src/providers/`. Production vehicle/auth APIs remain **PLANNED**.
 
 ## 3. Module ownership
 

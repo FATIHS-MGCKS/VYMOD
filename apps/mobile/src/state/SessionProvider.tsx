@@ -4,7 +4,7 @@ import {
   applyVehicleAccessRequest,
   canCompleteMockVerification,
   lifecycleFromSession,
-} from '@/app/navigation/authorization';
+} from '@/navigation/authorization';
 import type { AccountLifecycleState, SessionSnapshot } from '@/domain/session';
 import {
   createActiveSession,

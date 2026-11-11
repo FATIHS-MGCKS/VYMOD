@@ -6,7 +6,7 @@ import {
   canCompleteMockVerification,
   canSubmitVehicleAccessRequest,
   redirectForDeniedVehicleAccess,
-} from '@/app/navigation/authorization';
+} from '@/navigation/authorization';
 import { sessionFixtures } from '@/testing/testProviders';
 
 describe('vehicle authorization (P1 client guards)', () => {

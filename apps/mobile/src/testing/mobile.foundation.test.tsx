@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 
 import DashboardScreen from '../../app/(app)/(tabs)/index';
@@ -10,7 +10,7 @@ import {
   canAccessVehicleId,
   canAccessVehicleTelemetryViews,
   defaultRouteForSession,
-} from '@/app/navigation/authorization';
+} from '@/navigation/authorization';
 import { DEMO_VEHICLE_ID } from '@/data/mocks/fixtures';
 import { CATALOGS } from '@/localization/catalogs';
 import { createRuntimeI18nAdapter } from '@/localization/runtimeI18nAdapter';
@@ -18,7 +18,6 @@ import { TestProviders, sessionFixtures } from '@/testing/testProviders';
 import { MockAuthRepository } from '@/data/repositories/MockAuthRepository';
 
 jest.mock('expo-router', () => {
-  const React = require('react');
   return {
     Link: ({ children, asChild }: { children: React.ReactNode; asChild?: boolean }) =>
       asChild ? children : children,
@@ -64,7 +63,9 @@ describe('VYMOD mobile P1 components', () => {
         <SignUpScreen />
       </TestProviders>,
     );
-    fireEvent.press(view.getByText('Register'));
+    await act(async () => {
+      fireEvent.press(view.getByText('Register'));
+    });
     await waitFor(() => {
       expect(view.getByText(/required/i)).toBeTruthy();
     });

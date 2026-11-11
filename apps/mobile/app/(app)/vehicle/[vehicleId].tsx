@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
 
-import { useVehicleIdGuard } from '@/app/navigation/useVehicleAccessGuard';
+import { useVehicleIdGuard } from '@/navigation/useVehicleAccessGuard';
 import { AppScreen } from '@/design-system/components/AppScreen';
 import { AppText } from '@/design-system/components/AppText';
 import { useTranslation } from '@/localization/I18nProvider';

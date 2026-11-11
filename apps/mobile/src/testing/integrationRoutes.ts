@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports -- Expo Router integration fixture uses sync route requires */
 import { IntegrationRootLayout } from '@/testing/integrationRootLayout';
 
 export const integrationRouteMap = {

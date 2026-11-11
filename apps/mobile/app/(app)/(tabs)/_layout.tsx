@@ -5,8 +5,8 @@ import {
   canAccessVehicleTelemetryViews,
   defaultRouteForSession,
   isRestrictedAccountOnly,
-} from '@/app/navigation/authorization';
-import { useRevocationWatcher } from '@/app/navigation/useVehicleAccessGuard';
+} from '@/navigation/authorization';
+import { useRevocationWatcher } from '@/navigation/useVehicleAccessGuard';
 import { useTheme } from '@/design-system/themes/ThemeProvider';
 import { useTranslation } from '@/localization/I18nProvider';
 import { useSession } from '@/state/SessionProvider';

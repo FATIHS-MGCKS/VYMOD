@@ -5,7 +5,7 @@ import {
   canAccessVehicleId,
   canAccessVehicleTelemetryViews,
   redirectForDeniedVehicleAccess,
-} from '@/app/navigation/authorization';
+} from '@/navigation/authorization';
 import { useSession } from '@/state/SessionProvider';
 
 /**

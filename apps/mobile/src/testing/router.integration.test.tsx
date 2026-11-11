@@ -5,7 +5,7 @@ import {
   applyVehicleAccessRequest,
   canCompleteMockVerification,
   canSubmitVehicleAccessRequest,
-} from '@/app/navigation/authorization';
+} from '@/navigation/authorization';
 import { installRouterTestLifecycle, renderApp, setSession } from '@/testing/routerTestHarness';
 import { sessionFixtures } from '@/testing/testProviders';
 

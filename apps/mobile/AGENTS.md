@@ -15,11 +15,11 @@ From this directory: `npx expo start`, `npx expo-doctor`, `npx expo install <pkg
 
 ## Routing
 
-**Expo Router** file routes live in `apps/mobile/app/` (not `src/app/`). Business logic, design system, and providers live under `apps/mobile/src/`.
+**Expo Router** file routes live in `apps/mobile/app/` only. Never add `apps/mobile/src/app/` (Expo prefers it over `app/`). Navigation policy, providers, and other logic live under `apps/mobile/src/navigation/` and `apps/mobile/src/providers/`.
 
 ## P1 security note
 
-Navigation guards in `src/app/navigation/` are **client-side development controls only**, not production authorization.
+Navigation guards in `src/navigation/` are **client-side development controls only**, not production authorization.
 
 ## Native / EAS
 

@@ -10,5 +10,6 @@
 
 | Evidence | ID | Path |
 | --- | --- | --- |
-| Mobile Jest suites | MOB-EVID-001 | `apps/mobile/src/testing/*.test.tsx`, `apps/mobile/src/app/navigation/authorization.test.ts` |
+| Mobile Jest suites | MOB-EVID-001 | `apps/mobile/src/testing/*.test.tsx`, `apps/mobile/src/navigation/authorization.test.ts` |
+| Expo route root gate | MOB-EVID-004 | `tools/governance/checks/expo-route-root.mjs` |
 | CI mobile job | MOB-EVID-002 | `.github/workflows/governance.yml` (`jobs.mobile`) |

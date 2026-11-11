@@ -4,7 +4,7 @@ import React from 'react';
 import {
   canAccessRestrictedAccountShell,
   defaultRouteForSession,
-} from '@/app/navigation/authorization';
+} from '@/navigation/authorization';
 import { useSession } from '@/state/SessionProvider';
 
 /** P1 client-side shell guard — not production authorization. */

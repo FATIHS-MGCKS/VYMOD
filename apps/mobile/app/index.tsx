@@ -2,7 +2,7 @@ import { Redirect } from 'expo-router';
 import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
-import { defaultRouteForState } from '@/app/navigation/routePolicy';
+import { defaultRouteForState } from '@/navigation/routePolicy';
 import { useTheme } from '@/design-system/themes/ThemeProvider';
 import { useLifecycle } from '@/state/SessionProvider';
 

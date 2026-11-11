@@ -8,15 +8,18 @@ edges:
   - from: MOB-NAV-001
     relation: protects
     to: MOB-DOM-001
+  - from: MOB-GATE-001
+    relation: validates
+    to: MOB-ROUTER-001
   - from: MOB-INV-001
     relation: derives_from
     to: MOB-NAV-001
   - from: MOB-EVID-001
     relation: validates
     to: MOB-NAV-001
-  - from: MOB-EVID-001
+  - from: MOB-EVID-004
     relation: validates
-    to: MOB-ROUTER-001
+    to: MOB-GATE-001
   - from: MOB-EVID-002
     relation: validates
     to: MOB-DOM-001

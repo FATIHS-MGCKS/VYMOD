@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { AppProviders } from '@/app/providers/AppProviders';
-import { RootNavigationLayout } from '@/app/navigation/RootNavigationLayout';
+import { AppProviders } from '@/providers/AppProviders';
+import { RootNavigationLayout } from '@/navigation/RootNavigationLayout';
 import { createSignedOutSession } from '@/data/mocks/fixtures';
 import type { SessionSnapshot } from '@/domain/session';
 

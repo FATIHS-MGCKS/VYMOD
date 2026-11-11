@@ -61,3 +61,23 @@
 | **REMAINING_GAPS** | Optional Expo Router Link back-path coverage |
 | **Evidence** | MOB-EVID-001, MOB-EVID-002 |
 | **Validation status** | PROPOSED |
+
+## CHG-MOB-2026-11-11-P1-004
+
+| Field | Value |
+| --- | --- |
+| **Date** | 2026-11-11 |
+| **PR** | #3 |
+| **Code baseline** | `0f7933ef52f0a88dc0bbf3870cf50ab4f8add5ce` (pre route-root fix) |
+| **Affected components** | `apps/mobile/app/`, `src/navigation/`, `src/providers/`, expo-route-root gate, CI |
+| **BEFORE** | `src/app/` shadowed `app/`; Expo export used wrong router root |
+| **WHY** | P1 runtime route-discovery correction |
+| **CHANGE** | Move non-route code out of `src/app/`; `checkExpoRouteRoot`; CI export log gate |
+| **EXPECTED_EFFECT** | Production bundles discover real screens |
+| **VALIDATION** | `npm run validate`, `npm test`, mobile CI exports |
+| **OBSERVED_EFFECT** | pending CI on final commit |
+| **NON_EFFECTS** | No merge; no backend |
+| **TRADEOFFS** | Validator uses filesystem + export log probe in CI |
+| **REMAINING_GAPS** | Native simulator smoke not automated |
+| **Evidence** | MOB-EVID-004, MOB-EVID-005 |
+| **Validation status** | PROPOSED |

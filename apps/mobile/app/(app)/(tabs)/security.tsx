@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useVehicleTelemetryGuard } from '@/app/navigation/useVehicleAccessGuard';
+import { useVehicleTelemetryGuard } from '@/navigation/useVehicleAccessGuard';
 import { View } from 'react-native';
 
 import { AppButton } from '@/design-system/components/AppButton';
