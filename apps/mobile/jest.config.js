@@ -4,6 +4,7 @@ const transformIgnorePatterns = [
 ];
 
 module.exports = {
+  maxWorkers: 1,
   projects: [
     {
       displayName: 'unit',

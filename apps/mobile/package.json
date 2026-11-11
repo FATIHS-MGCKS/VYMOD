@@ -10,7 +10,7 @@
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "test": "jest",
+    "test": "jest --runInBand",
     "export:ios": "expo export --platform ios",
     "export:android": "expo export --platform android"
   },
