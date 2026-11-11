@@ -1,0 +1,19 @@
+edges:
+  - from: MOB-PIPE-001
+    relation: invokes
+    to: MOB-FN-001
+  - from: MOB-PIPE-001
+    relation: validates
+    to: MOB-DOM-001
+  - from: MOB-INV-001
+    relation: protects
+    to: MOB-DOM-001
+  - from: MOB-EVID-001
+    relation: validates
+    to: MOB-PIPE-001
+  - from: MOB-EVID-002
+    relation: validates
+    to: MOB-PIPE-001
+  - from: MOB-DOM-001
+    relation: derives_from
+    to: MOB-INV-001

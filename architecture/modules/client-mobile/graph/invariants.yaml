@@ -1,0 +1,10 @@
+invariants:
+  - id: MOB-INV-001
+    title: Fail-closed security posture
+    kind: CONFIRMED_INVARIANT
+    epistemic_status: CONFIRMED
+    statement: Auth, entitlement, and authorization errors must fail closed.
+    evidence:
+      - MOB-EVID-001
+    source_paths:
+      - architecture/SECURITY_INVARIANTS.md

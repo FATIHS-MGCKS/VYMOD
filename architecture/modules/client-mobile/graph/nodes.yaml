@@ -1,0 +1,41 @@
+nodes:
+  - id: MOB-DOM-001
+    type: domain
+    title: VYMOD client-mobile domain
+    epistemic_status: CONFIRMED
+    summary: Repository-wide validators, CI, and agent contracts.
+    source_paths:
+      - architecture/MASTER_ARCHITECTURE.md
+  - id: MOB-PIPE-001
+    type: pipeline
+    title: npm run validate
+    epistemic_status: CONFIRMED
+    summary: Central client-mobile validation entrypoint.
+    source_paths:
+      - tools/client-mobile/run-all.mjs
+  - id: MOB-FN-001
+    type: function
+    title: run-all orchestrator
+    epistemic_status: CONFIRMED
+    summary: Executes registered client-mobile checks.
+    source_paths:
+      - tools/client-mobile/run-all.mjs
+  - id: MOB-INV-001
+    type: invariant
+    title: Fail-closed security posture
+    epistemic_status: CONFIRMED
+    summary: Documented in SECURITY_INVARIANTS.md.
+    source_paths:
+      - architecture/SECURITY_INVARIANTS.md
+  - id: MOB-EVID-001
+    type: evidence
+    title: Validator unit tests
+    epistemic_status: CONFIRMED
+    summary: Node and client-mobile unit tests in tools/client-mobile/tests.
+  - id: MOB-EVID-002
+    type: evidence
+    title: Governance GitHub Actions workflow
+    epistemic_status: CONFIRMED
+    summary: GitHub Actions Governance workflow with gitleaks and npm validate.
+    source_paths:
+      - .github/workflows/client-mobile.yml

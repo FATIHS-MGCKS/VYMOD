@@ -30,7 +30,9 @@ VYMOD is the **consumer experience layer**. **SYNQDRIVE Core** remains authorita
 [ governance + i18n foundations span all layers ]
 ```
 
-**P0 actual:** `governance` and `i18n` modules ACTIVE in repo; clients, API, integrations **PLANNED** (inventory only).
+**P0 actual:** `governance` and `i18n` modules ACTIVE in repo; API and integrations **PLANNED** (inventory only).
+
+**P1 actual:** `client-mobile` scaffold under `apps/mobile/` (Expo SDK 58, mock session/entitlement, root-catalog i18n runtime). Production vehicle/auth APIs remain **PLANNED**.
 
 ## 3. Module ownership
 

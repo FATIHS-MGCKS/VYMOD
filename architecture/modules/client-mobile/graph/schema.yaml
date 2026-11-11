@@ -1,0 +1,22 @@
+version: "1.0"
+module: client-mobile
+id_prefix: MOB-
+node_types:
+  - domain
+  - pipeline
+  - policy
+  - invariant
+  - evidence
+  - function
+epistemic_status_values:
+  - CONFIRMED
+  - INFERRED
+  - HISTORICAL
+  - UNKNOWN
+  - CONTRADICTED
+relation_types:
+  - governs
+  - invokes
+  - validates
+  - derives_from
+  - protects
