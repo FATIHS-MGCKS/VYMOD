@@ -53,13 +53,16 @@ Read the relevant authorities **before** implementation. Do not duplicate long r
 
 ## Before completion
 
-1. Run `npm run validate` (and targeted tests).
-2. Update affected module authorities (`CURRENT_STATE.md`, `FUNCTION_CATALOG.md`, append `research/CHANGE_LEDGER.md`).
-3. Sync `MODULE_REGISTRY.md` only when coverage or paths actually change.
-4. Report **failed**, **skipped**, and **NOT_IMPLEMENTED** checks explicitly.
-5. Update architecture/compliance docs for substantive changes.
-6. Include privacy and security impact notes in the completion report.
-7. Never claim **IMPLEMENTED** or **VERIFIED** without evidence.
+1. Run `npm run validate` and `npm test` (use `npm run validate:i18n` only for i18n-only doc edits).
+2. Update affected module authorities: `CURRENT_STATE.md`, `FUNCTION_CATALOG.md`, append-only `research/CHANGE_LEDGER.md`.
+3. For cross-module changes, read each affected module README (even if `NOT_STARTED`).
+4. Record registry sync per affected module: **UPDATED** or **UNCHANGED** (do not edit registry for cosmetic-only diffs).
+5. Sync `MODULE_REGISTRY.md` only when coverage, paths, or ownership actually change.
+6. Report **failed**, **skipped**, and **NOT_IMPLEMENTED** checks explicitly.
+7. Update architecture/compliance docs only when boundaries change.
+8. Include privacy and security impact notes; never claim production validation without evidence.
+9. Never claim **IMPLEMENTED** or **VERIFIED** without evidence.
+10. Governance tests validate **repository** rules only — not future application authorization.
 
 ## Prohibited agent behavior
 

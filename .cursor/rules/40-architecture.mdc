@@ -9,13 +9,12 @@ globs:
 
 # Architecture
 
-Read `architecture/MASTER_ARCHITECTURE.md`, then `architecture/MODULE_REGISTRY.md`, before structural changes.
+1. Read `architecture/MASTER_ARCHITECTURE.md` → `architecture/MODULE_REGISTRY.md`.
+2. Evaluate **Registry coverage status**; read `architecture/modules/<id>/` when `AUTHORITY_ACTIVE`.
+3. Substantive changes: update module `CURRENT_STATE.md`, `FUNCTION_CATALOG.md`, append `CHANGE_LEDGER.md`; note registry **UPDATED** / **UNCHANGED**.
+4. Cross-module edits: skim each affected module README.
+5. Run `npm run validate` before claiming done (`validate:i18n` only when scope is i18n catalogs/validators).
 
-- Check **Registry coverage status**; read `architecture/modules/<id>/` when `AUTHORITY_ACTIVE`.
-- `SYSTEM_OVERVIEW.md` remains the logical system description; do not duplicate module detail in PR prose.
-- Document substantive cross-cutting decisions in `architecture/decisions/`.
-- Substantive changes: update module `CHANGE_LEDGER.md`, `CURRENT_STATE.md`, and registry metadata when applicable.
-- VYMOD is consumer-facing; Core interfaces are versioned (`architecture/integrations/`).
-- No live DIMO/SYNQDRIVE wiring without separate authorization.
+`SYSTEM_OVERVIEW.md` = logical system. Core integration docs only — no live wiring without authorization.
 
-Owners in MODULE_REGISTRY must approve boundary changes.
+Owners in MODULE_REGISTRY approve boundary changes.

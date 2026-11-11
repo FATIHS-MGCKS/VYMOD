@@ -31,9 +31,11 @@ nodes:
     type: evidence
     title: Validator unit tests
     epistemic_status: CONFIRMED
+    summary: Node and governance unit tests in tools/governance/tests.
   - id: GOV-EVID-002
     type: evidence
     title: Governance GitHub Actions workflow
     epistemic_status: CONFIRMED
+    summary: GitHub Actions Governance workflow with gitleaks and npm validate.
     source_paths:
       - .github/workflows/governance.yml

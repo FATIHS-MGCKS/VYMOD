@@ -4,6 +4,8 @@ import { fromRoot } from "../lib/paths.mjs";
 import { parseModuleRegistry } from "./module-registry.mjs";
 import { readText } from "../lib/read.mjs";
 import { validateKnowledgeGraph } from "../lib/knowledge-graph.mjs";
+import { validateGraphNamespaceRegistry, readModuleGraphMeta } from "../lib/module-graph-meta.mjs";
+import { validateFunctionCatalog } from "../lib/function-catalog.mjs";
 
 const COVERAGE_ACTIVE = "AUTHORITY_ACTIVE";
 const COVERAGE_AUDIT = "AUDIT_IN_PROGRESS";
@@ -33,12 +35,19 @@ const AUTHORITY_ACTIVE_FILES = [
 
 const AUDIT_MINIMUM_FILES = ["README.md", "AUDIT_MANIFEST.md", "research/CHANGE_LEDGER.md"];
 
-const GRAPH_PREFIX = {
-  governance: "GOV-",
-  i18n: "I18N-",
-};
-
-const FN_ID_RE = /\b([A-Z]{2,8}-FN-\d{3})\b/g;
+const CHANGE_LEDGER_REQUIRED_FIELDS = [
+  "Date",
+  "PR",
+  "Code baseline",
+  "BEFORE",
+  "WHY",
+  "CHANGE",
+  "EXPECTED_EFFECT",
+  "VALIDATION",
+  "OBSERVED_EFFECT",
+  "Evidence",
+  "Validation status",
+];
 
 function authorityExists(rel) {
   return rel && rel !== "—" && fs.existsSync(fromRoot(rel));
@@ -53,25 +62,24 @@ function checkAuthorityFiles(rel, files) {
   return errors;
 }
 
-function parseFunctionIds(modules) {
+function validateChangeLedger(rel) {
   const errors = [];
-  const seen = new Map();
-  for (const mod of modules) {
-    const rel = mod.fields["Authority path"];
-    if (!authorityExists(rel)) continue;
-    const cat = fromRoot(path.join(rel, "FUNCTION_CATALOG.md"));
-    if (!fs.existsSync(cat)) continue;
-    const text = readText(cat);
-    let m;
-    const re = new RegExp(FN_ID_RE.source, "g");
-    while ((m = re.exec(text)) !== null) {
-      const id = m[1];
-      if (seen.has(id)) {
-        errors.push(`Duplicate function ID ${id} in ${mod.name} and ${seen.get(id)}`);
-      } else {
-        seen.set(id, mod.name);
-      }
+  const ledger = fromRoot(path.join(rel, "research/CHANGE_LEDGER.md"));
+  if (!fs.existsSync(ledger)) return errors;
+  const text = readText(ledger);
+  const sections = text.split(/^## CHG-/gm).slice(1);
+  if (sections.length === 0) {
+    errors.push(`${rel}: CHANGE_LEDGER has no CHG-* entries`);
+    return errors;
+  }
+  const latest = sections[sections.length - 1];
+  for (const field of CHANGE_LEDGER_REQUIRED_FIELDS) {
+    if (!latest.includes(`**${field}**`)) {
+      errors.push(`${rel}: latest CHANGE_LEDGER entry missing **${field}**`);
     }
+  }
+  if (latest.match(/\*\*Commit\*\*.*pending merge/i) && latest.includes("PRODUCTION_VALIDATED")) {
+    errors.push(`${rel}: CHANGE_LEDGER must not claim PRODUCTION_VALIDATED with pending merge`);
   }
   return errors;
 }
@@ -82,8 +90,15 @@ export function checkModuleAuthority() {
   const errors = [...parseErrors];
 
   const allowedCoverage = new Set(["NOT_STARTED", "AUDIT_IN_PROGRESS", "AUTHORITY_ACTIVE", "SUPERSEDED"]);
+  const activeForGraph = [];
 
+  const moduleNames = new Set();
   for (const mod of modules) {
+    if (moduleNames.has(mod.name)) {
+      errors.push(`Duplicate registry module id: ${mod.name}`);
+    }
+    moduleNames.add(mod.name);
+
     const coverage = mod.fields["Registry coverage status"];
     const authorityPath = mod.fields["Authority path"];
 
@@ -120,26 +135,57 @@ export function checkModuleAuthority() {
 
     if (coverage === COVERAGE_ACTIVE) {
       errors.push(...checkAuthorityFiles(authorityPath, AUTHORITY_ACTIVE_FILES));
-      const prefix = GRAPH_PREFIX[mod.name];
-      if (!prefix) {
-        errors.push(`Module \`${mod.name}\` AUTHORITY_ACTIVE requires graph id prefix mapping`);
-      } else {
-        const graph = validateKnowledgeGraph(authorityPath, prefix);
+
+      const meta = readModuleGraphMeta(authorityPath);
+      errors.push(...meta.errors);
+      if (meta.id_prefix) {
+        activeForGraph.push({ moduleName: mod.name, authorityPath, idPrefix: meta.id_prefix });
+        const graph = validateKnowledgeGraph(authorityPath, meta.id_prefix, mod.name);
         if (!graph.ok) errors.push(...graph.errors);
+
       }
+
       const readme = readText(fromRoot(path.join(authorityPath, "README.md")));
-      if (!readme.includes("Mandatory entry")) {
-        errors.push(`${authorityPath}/README.md must include navigation / mandatory entry section`);
+      const requiredNav = [
+        "CURRENT_STATE.md",
+        "FUNCTION_CATALOG.md",
+        "AGENT_CONTRACT.md",
+        "CHANGE_LEDGER.md",
+      ];
+      for (const doc of requiredNav) {
+        if (!readme.includes(doc)) {
+          errors.push(`${authorityPath}/README.md must link or name ${doc} in navigation`);
+        }
       }
+
+      errors.push(...validateChangeLedger(authorityPath));
     }
   }
 
-  errors.push(...parseFunctionIds(modules));
+  const ns = validateGraphNamespaceRegistry(
+    activeForGraph.map(({ moduleName, authorityPath }) => ({ moduleName, authorityPath })),
+  );
+  if (!ns.ok) errors.push(...ns.errors);
+
+  const globalFnIds = new Map();
+  for (const { authorityPath, idPrefix } of activeForGraph) {
+    const catalog = validateFunctionCatalog(authorityPath, idPrefix);
+    if (!catalog.ok) errors.push(...catalog.errors);
+    for (const fid of catalog.functionIds ?? []) {
+      if (globalFnIds.has(fid)) {
+        errors.push(
+          `Duplicate function ID ${fid} across modules ${globalFnIds.get(fid)} and ${authorityPath}`,
+        );
+      } else {
+        globalFnIds.set(fid, authorityPath);
+      }
+    }
+  }
 
   return {
     id: "module-authority",
     status: errors.length ? "fail" : "pass",
     errors,
-    meta: { modules: modules.length },
+    meta: { modules: modules.length, graphNamespaces: ns.prefixToModule?.size ?? 0 },
   };
 }

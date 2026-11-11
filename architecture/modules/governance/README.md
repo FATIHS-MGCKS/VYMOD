@@ -26,6 +26,8 @@ Repository-wide **AI governance**: `AGENTS.md`, compliance/standards docs, Curso
 | [AGENT_CONTRACT.md](./AGENT_CONTRACT.md) | Module agent rules |
 | [KNOWLEDGE_GRAPH.md](./KNOWLEDGE_GRAPH.md) | Graph index |
 | [research/CHANGE_LEDGER.md](./research/CHANGE_LEDGER.md) | Append-only changes |
+| [KNOWLEDGE_GRAPH.md](./KNOWLEDGE_GRAPH.md) | Graph summary |
+| [AGENT_CONTRACT.md](./AGENT_CONTRACT.md) | Module agent rules |
 
 ## Validation
 

@@ -2,34 +2,26 @@
 
 | Field | Value |
 | --- | --- |
-| **Implementation status** | `ACTIVE` (catalogs + validators) |
+| **Implementation status** | `ACTIVE` |
 | **Registry coverage status** | `AUTHORITY_ACTIVE` |
 | **Authority path** | `architecture/modules/i18n/` |
 | **Owner** | `@vymod-client` |
-
-## What this module owns
-
-Framework-agnostic locale catalogs (`i18n/locales/`), adapter contract (`i18n/ADAPTER.md`), and validation via `checkI18n` / ICU parity.
-
-## What it does not own
-
-- UI framework selection (PLANNED)
-- Backend API localization (future `api-gateway`)
-- Legal authoritative text (requires separate legal-review metadata when introduced)
 
 ## Mandatory entry documents
 
 | Document | Purpose |
 | --- | --- |
 | [CURRENT_STATE.md](./CURRENT_STATE.md) | Catalogs and validators |
-| [FUNCTION_CATALOG.md](./FUNCTION_CATALOG.md) | Validator functions |
-| [research/CHANGE_LEDGER.md](./research/CHANGE_LEDGER.md) | Changes |
+| [FUNCTION_CATALOG.md](./FUNCTION_CATALOG.md) | Exported validators / planned adapter |
+| [AGENT_CONTRACT.md](./AGENT_CONTRACT.md) | Module rules |
+| [research/CHANGE_LEDGER.md](./research/CHANGE_LEDGER.md) | Append-only history |
+| [KNOWLEDGE_GRAPH.md](./KNOWLEDGE_GRAPH.md) | Graph summary |
 
 ## Validation
 
 ```bash
-npm run validate:i18n
+npm run validate -- --only i18n
 npm test
 ```
 
-Standards: `standards/I18N.md`, `i18n/ADAPTER.md`.
+Also: `standards/I18N.md`, `i18n/ADAPTER.md`.

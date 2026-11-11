@@ -3,7 +3,7 @@ invariants:
     title: Locale key parity
     kind: CONFIRMED_INVARIANT
     epistemic_status: CONFIRMED
-    statement: Every key in de-DE must exist in en-US with matching ICU placeholders.
+    statement: de-DE and en-US keys and ICU placeholders must match.
     evidence:
       - I18N-EVID-001
     source_paths:

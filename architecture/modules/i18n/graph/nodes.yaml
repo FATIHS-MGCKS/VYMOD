@@ -11,12 +11,14 @@ nodes:
     type: data
     title: Locale catalogs
     epistemic_status: CONFIRMED
+    summary: Framework-agnostic JSON locale files.
     source_paths:
       - i18n/locales/
   - id: I18N-PIPE-001
     type: pipeline
     title: checkI18n validator
     epistemic_status: CONFIRMED
+    summary: CI gate for locale catalogs.
     source_paths:
       - tools/governance/checks/i18n.mjs
   - id: I18N-INV-001
@@ -28,5 +30,6 @@ nodes:
     type: evidence
     title: i18n negative tests
     epistemic_status: CONFIRMED
+    summary: Negative i18n and ICU unit tests.
     source_paths:
       - tools/governance/tests/i18n-negative.test.mjs
