@@ -1,0 +1,22 @@
+---
+description: Application and API security (OWASP ASVS-oriented)
+globs:
+  - "**/*.{ts,tsx,js,jsx}"
+  - "standards/API_SECURITY.md"
+  - "standards/SECURE_CODING.md"
+  - "compliance/THREAT_MODEL.md"
+---
+
+# Security
+
+Follow `standards/SECURE_CODING.md`, `standards/API_SECURITY.md`, and `architecture/SECURITY_INVARIANTS.md`.
+
+- Server-side authorization for every sensitive operation; vehicle-scoped access control.
+- Session and device credentials: hardware-backed keys where available (future).
+- Password, passkey, or DIMO login **does not** auto-authorize security-critical vehicle ops.
+- Validate all external input; rate-limit and abuse-protect APIs.
+- Secrets only in server-side secret stores; scan in CI.
+- Dependency and vulnerability gates when lockfiles exist.
+- Audit security-relevant events without sensitive payloads (no location history in logs).
+
+Sensitive vehicle controls: **not implemented** until separate security architecture approval.

@@ -1,0 +1,25 @@
+---
+description: VYMOD core governance — always apply
+alwaysApply: true
+---
+
+# VYMOD core governance
+
+VYMOD is a premium consumer vehicle intelligence and security app. SYNQDRIVE Core is authoritative for vehicle identity, DIMO integration, telemetry, and analytics.
+
+## Non-negotiables
+
+- Read `AGENTS.md` and affected docs in `architecture/`, `compliance/`, `standards/` before coding.
+- No direct SYNQDRIVE production DB access; no reimplementation of Core analytics.
+- No vehicle enrollment from client-supplied identifiers alone.
+- No provider credentials on mobile clients.
+- Fail closed on auth and entitlement errors.
+- User-visible strings only via i18n keys (`de-DE`, `en-US`); missing keys must fail CI.
+- Never log precise GPS/location history by default.
+- Do not claim regulatory compliance without evidence.
+
+## Quality gates
+
+Run `npm run validate` before claiming done. Report NOT_IMPLEMENTED checks openly.
+
+Module changes require `architecture/MODULE_REGISTRY.md` consistency.

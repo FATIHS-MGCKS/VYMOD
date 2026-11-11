@@ -1,47 +1,54 @@
 # VYMOD
-your car. your rules.
 
-VYMOD
+**your car. your rules.**
 
-Premium Vehicle Security & Intelligence
+Premium consumer vehicle security and intelligence, powered by **SYNQDRIVE Core**.
 
-VYMOD is a consumer vehicle application powered by SYNQDRIVE Core.
+VYMOD is a separate product with explicit integration boundaries. SYNQDRIVE remains authoritative for vehicle identity, DIMO infrastructure, telemetry, analytics, and entitlement. See `architecture/integrations/SYNQDRIVE_CORE.md`.
 
-The platform combines vehicle monitoring, telemetry, driving intelligence, diagnostics, and future vehicle security capabilities in a unified consumer experience.
+## Status
 
-Architecture Principles
+**Phase 0 — AI governance and compliance foundation** (documentation, validators, CI). No application runtime or live vehicle integration in this phase.
 
-* SYNQDRIVE Core remains the authoritative vehicle data platform.
-* VYMOD operates as a separate product with explicitly defined integration contracts.
-* Vehicle onboarding requires appropriate authorization and user consent.
-* Vehicle telemetry and analytics must be consumed through approved SYNQDRIVE interfaces.
-* All security-sensitive operations must fail closed.
-* Safety-critical vehicle control is excluded until separately approved and validated.
+Creating docs or passing validators does **not** mean GDPR compliance, ISO certification, or regulatory approval.
 
-Project Status
+## Quick start (developers and agents)
 
-Phase 0 — Repository Foundation
+1. Read `AGENTS.md` (mandatory contract for AI-assisted work).
+2. Read `architecture/README.md` and `compliance/README.md`.
+3. Run local validation:
 
-Initial scope:
+```bash
+npm run validate
+npm test
+```
 
-* Consumer application foundation
-* Architecture governance
-* Authentication and device identity design
-* SYNQDRIVE Core integration contract
-* Product onboarding and entitlement model
+## Documentation map
 
-Documentation
+| Area | Path |
+| --- | --- |
+| Agent contract | `AGENTS.md` |
+| Architecture | `architecture/` |
+| Compliance engineering | `compliance/` |
+| Engineering standards | `standards/` |
+| Product vision | `docs/product/VYMOD_PRODUCT_VISION.md` |
+| i18n catalogs | `i18n/locales/` (`de-DE`, `en-US`) |
+| Cursor rules | `.cursor/rules/` |
 
-* AGENTS.md — AI development rules
-* architecture/README.md — Architecture entrypoint
-* architecture/MODULE_REGISTRY.md — Module ownership
-* architecture/SECURITY_INVARIANTS.md — Security boundaries
-* docs/product/VYMOD_PRODUCT_VISION.md — Product scope
+## Security invariants (summary)
 
-Development Rules
+Full list: `architecture/SECURITY_INVARIANTS.md`.
 
-Architecture must be documented before significant implementation.
+- Fail closed on auth and entitlement errors.
+- No direct SYNQDRIVE production database access.
+- No provider credentials on mobile clients.
+- No precise location history in logs, analytics, or blockchain by default.
+- No security-critical vehicle controls without approved architecture.
 
-Changes affecting authentication, vehicle ownership, telemetry authorization, or vehicle control require explicit architectural review.
+## Governance CI
 
-No production deployment, external system mutation, or vehicle control activation is permitted without explicit authorization.
+GitHub Actions workflow `.github/workflows/governance.yml` runs `npm run validate` and validator tests on push/PR.
+
+## Language
+
+German (`de-DE`) is the initial product language; all UI must use translation keys with `en-US` parity enforced in CI (`standards/I18N.md`).

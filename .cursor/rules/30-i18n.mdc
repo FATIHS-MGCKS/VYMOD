@@ -1,0 +1,18 @@
+---
+description: i18n-first multilingual UI rules
+globs:
+  - "i18n/**"
+  - "standards/I18N.md"
+  - "**/*.{tsx,jsx,vue,svelte}"
+---
+
+# Internationalization
+
+Authoritative: `standards/I18N.md`, `i18n/ADAPTER.md`.
+
+- Locales: `de-DE` (initial product language), `en-US`; keys must exist in both.
+- No hardcoded user-facing strings (errors, a11y labels, notifications included).
+- Locale-aware dates, numbers, units; UTC storage.
+- RTL-safe layouts; language independent of measurement preference.
+- Legal copy: separate keys + legal-review status metadata when introduced.
+- CI fails on missing keys or placeholder mismatches (`npm run validate:i18n`).
