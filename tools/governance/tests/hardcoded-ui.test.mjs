@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { scanHardcodedUiContent } from "../checks/hardcoded-ui.mjs";
-import { isLikelyUserVisibleCopy } from "../lib/jsx-hardcoded.mjs";
+import { isLikelyUserVisibleCopy, isAllowedLocalizationExpression } from "../lib/jsx-hardcoded.mjs";
+import { parse } from "@babel/parser";
 
 test("isLikelyUserVisibleCopy rejects paths and translation keys", () => {
   assert.equal(isLikelyUserVisibleCopy("./src/App"), false);
@@ -53,6 +54,36 @@ test("does not skip file when useTranslation is also present", () => {
   `;
   const { violations } = scanHardcodedUiContent(source, "X.tsx");
   assert.ok(violations.some((v) => v.includes("Delete account")));
+});
+
+test("rejects hardcoded string in user-facing attribute expression", () => {
+  const source = `
+    export function Danger() {
+      return <button title={"Delete account"}>X</button>;
+    }
+  `;
+  const { violations } = scanHardcodedUiContent(source, "Danger.tsx");
+  assert.ok(violations.some((v) => v.includes("Delete account")));
+});
+
+test("allows localization call in user-facing attribute expression", () => {
+  const source = `
+    import { t } from "i18n";
+    export function Danger() {
+      return <button title={t("actions.delete")}>X</button>;
+    }
+  `;
+  const { violations } = scanHardcodedUiContent(source, "Danger.tsx");
+  assert.equal(violations.length, 0);
+});
+
+test("isAllowedLocalizationExpression accepts t() calls only", () => {
+  const good = parse("const _x = t('key');", { sourceType: "module" }).program.body[0]
+    .declarations[0].init;
+  assert.equal(isAllowedLocalizationExpression(good), true);
+  const bad = parse("const _x = 'hard';", { sourceType: "module" }).program.body[0]
+    .declarations[0].init;
+  assert.equal(isAllowedLocalizationExpression(bad), false);
 });
 
 test("allows technical JSX without user sentences", () => {

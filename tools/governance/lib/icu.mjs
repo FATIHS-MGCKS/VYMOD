@@ -1,4 +1,5 @@
 import { parse } from "@formatjs/icu-messageformat-parser";
+import { TYPE } from "@formatjs/icu-messageformat-parser/types.js";
 
 /**
  * @param {string} message
@@ -17,26 +18,46 @@ export function parseIcuMessage(message, keyLabel = "") {
 }
 
 /**
+ * Collect ICU placeholder variable names (not formatting tag names or # pound tokens).
+ *
  * @param {import('@formatjs/icu-messageformat-parser').MessageFormatElement[]} nodes
  * @param {Set<string>} placeholders
  */
 function walkAst(nodes, placeholders) {
+  if (!nodes) return;
   for (const el of nodes) {
     switch (el.type) {
-      case 1:
+      case TYPE.literal:
+        break;
+      case TYPE.argument:
+      case TYPE.number:
+      case TYPE.date:
+      case TYPE.time:
         placeholders.add(el.value);
         break;
-      case 5:
-      case 6:
-      case 7:
-      case 8:
-        if (el.value) placeholders.add(el.value);
-        for (const opt of el.options ? Object.values(el.options) : []) {
-          walkAst(opt.value, placeholders);
-        }
+      case TYPE.select:
+      case TYPE.plural:
+        placeholders.add(el.value);
+        walkSelectOrPluralOptions(el.options, placeholders);
+        break;
+      case TYPE.pound:
+        break;
+      case TYPE.tag:
+        walkAst(el.children, placeholders);
         break;
       default:
         break;
     }
+  }
+}
+
+/**
+ * @param {Record<string, { value: import('@formatjs/icu-messageformat-parser').MessageFormatElement[] }>} options
+ * @param {Set<string>} placeholders
+ */
+function walkSelectOrPluralOptions(options, placeholders) {
+  if (!options) return;
+  for (const opt of Object.values(options)) {
+    walkAst(opt.value, placeholders);
   }
 }

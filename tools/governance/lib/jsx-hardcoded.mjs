@@ -13,6 +13,39 @@ const USER_FACING_ATTRS = new Set([
 ]);
 
 /**
+ * @param {import('@babel/types').Expression} expr
+ * @returns {boolean}
+ */
+export function isAllowedLocalizationExpression(expr) {
+  if (expr?.type === "CallExpression") {
+    const c = expr.callee;
+    if (c.type === "Identifier" && c.name === "t") return true;
+    if (c.type === "MemberExpression" && !c.computed && c.property?.type === "Identifier" && c.property.name === "t") {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * @param {import('@babel/types').Expression | import('@babel/types').JSXEmptyExpression} expr
+ * @param {(text: string, loc?: object) => void} emit
+ */
+function collectHardcodedExpression(expr, emit) {
+  if (!expr || expr.type === "JSXEmptyExpression") return;
+  if (expr.type === "StringLiteral") {
+    emit(expr.value, expr.loc);
+    return;
+  }
+  if (expr.type === "TemplateLiteral" && expr.expressions.length === 0) {
+    const cooked = expr.quasis.map((q) => q.value.cooked ?? "").join("");
+    emit(cooked, expr.loc);
+    return;
+  }
+  if (isAllowedLocalizationExpression(expr)) return;
+}
+
+/**
  * @param {string} raw
  * @returns {boolean}
  */
@@ -66,14 +99,20 @@ export function analyzeJsxSource(source, fileLabel = "input.tsx") {
       const val = path.node.value;
       if (val?.type === "StringLiteral") {
         report(`attribute ${name}`, val.value, val.loc);
+        return;
+      }
+      if (val?.type === "JSXExpressionContainer") {
+        collectHardcodedExpression(val.expression, (text, loc) => {
+          report(`attribute ${name} expression`, text, loc);
+        });
       }
     },
     JSXExpressionContainer(path) {
+      if (path.parent?.type === "JSXAttribute") return;
       if (path.parent?.type !== "JSXElement" && path.parent?.type !== "JSXFragment") return;
-      const e = path.node.expression;
-      if (e?.type === "StringLiteral") {
-        report("JSX expression string", e.value, e.loc);
-      }
+      collectHardcodedExpression(path.node.expression, (text, loc) => {
+        report("JSX expression string", text, loc);
+      });
     },
   });
 
