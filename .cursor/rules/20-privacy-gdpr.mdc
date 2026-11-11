@@ -1,0 +1,21 @@
+---
+description: Privacy by design and GDPR-oriented development rules
+globs:
+  - "compliance/**"
+  - "docs/**"
+  - "**/*.{ts,tsx}"
+---
+
+# Privacy (GDPR-oriented)
+
+Authoritative: `compliance/GDPR.md`, `compliance/DATA_INVENTORY.md`, `compliance/DATA_CLASSIFICATION.md`.
+
+For features processing personal data, update the data inventory with purpose, categories, proposed legal basis (legal validation required), retention, recipients, and subject-rights impact.
+
+Special care: GPS, location history, driver behavior, vehicle–user links, diagnostics tied to individuals, auth/device data.
+
+- Anti-stalking: no unauthorized tracking; location not in logs/analytics/crash/blockchain by default.
+- Account holder may not be the only data subject.
+- DPIA screening per `compliance/DPIA_SCREENING.md` when triggers apply.
+
+Legal bases and retention periods require **REQUIRES_HUMAN_LEGAL_REVIEW**.

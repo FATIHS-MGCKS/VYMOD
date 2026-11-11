@@ -1,0 +1,19 @@
+---
+description: Architecture boundaries and module ownership
+globs:
+  - "architecture/**"
+  - "src/**"
+  - "apps/**"
+  - "packages/**"
+---
+
+# Architecture
+
+Read `architecture/SYSTEM_OVERVIEW.md` and `architecture/MODULE_REGISTRY.md` before structural changes.
+
+- VYMOD is consumer-facing; Core interfaces are versioned and explicit (`architecture/integrations/`).
+- Document substantive decisions in `architecture/decisions/`.
+- No unrestricted cross-product data access.
+- P0: integration **documentation only**, not live DIMO/SYNQDRIVE wiring.
+
+Owners in MODULE_REGISTRY must approve boundary changes.

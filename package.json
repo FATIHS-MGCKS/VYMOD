@@ -1,0 +1,22 @@
+{
+  "name": "vymod",
+  "version": "0.0.0",
+  "private": true,
+  "description": "VYMOD governance and validation (P0)",
+  "type": "module",
+  "scripts": {
+    "validate": "node tools/governance/run-all.mjs",
+    "validate:i18n": "node tools/governance/run-all.mjs --only i18n",
+    "validate:docs": "node tools/governance/run-all.mjs --only docs",
+    "test": "node --test tools/governance/tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@babel/parser": "^7.26.9",
+    "@babel/traverse": "^7.26.9",
+    "@formatjs/icu-messageformat-parser": "^2.9.8",
+    "ajv": "^8.17.1"
+  }
+}

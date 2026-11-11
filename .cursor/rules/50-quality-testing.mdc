@@ -1,0 +1,18 @@
+---
+description: Testing, lint, and validation gates
+globs:
+  - "**/*.test.*"
+  - "standards/TESTING.md"
+  - ".github/workflows/**"
+  - "tools/governance/**"
+---
+
+# Quality and testing
+
+Authoritative: `standards/TESTING.md`.
+
+- Add tests for security and privacy-sensitive logic when code exists.
+- Validator tests must include positive and negative cases.
+- Do not ship scripts that always exit 0 without checks.
+- Mark gates NOT_IMPLEMENTED with activation criteria when app code is absent.
+- Completion reports must list real test and CI outcomes.

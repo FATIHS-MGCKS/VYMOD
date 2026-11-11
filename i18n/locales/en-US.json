@@ -1,0 +1,13 @@
+{
+  "app.name": "VYMOD",
+  "app.tagline": "your car. your rules.",
+  "onboarding.welcome.title": "Welcome to VYMOD",
+  "onboarding.welcome.body": "Premium vehicle security and vehicle intelligence.",
+  "errors.network.timeout": "The connection timed out. Please try again.",
+  "errors.validation.required": "The field {fieldName} is required.",
+  "vehicle.list.count": "{count, plural, one {# vehicle} other {# vehicles}}",
+  "accessibility.main.navigation": "Main navigation",
+  "settings.language.label": "Language",
+  "settings.units.label": "Units of measure",
+  "privacy.location.notice": "Location data is processed only with your consent."
+}

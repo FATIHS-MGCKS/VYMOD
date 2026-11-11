@@ -1,0 +1,13 @@
+{
+  "app.name": "VYMOD",
+  "app.tagline": "Dein Auto. Deine Regeln.",
+  "onboarding.welcome.title": "Willkommen bei VYMOD",
+  "onboarding.welcome.body": "Premium-Fahrzeugsicherheit und Fahrzeugintelligenz.",
+  "errors.network.timeout": "Die Verbindung hat zu lange gedauert. Bitte versuche es erneut.",
+  "errors.validation.required": "Das Feld {fieldName} ist erforderlich.",
+  "vehicle.list.count": "{count, plural, one {# Fahrzeug} other {# Fahrzeuge}}",
+  "accessibility.main.navigation": "Hauptnavigation",
+  "settings.language.label": "Sprache",
+  "settings.units.label": "Maßeinheiten",
+  "privacy.location.notice": "Standortdaten werden nur mit deiner Zustimmung verarbeitet."
+}
