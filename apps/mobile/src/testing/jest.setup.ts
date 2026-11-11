@@ -14,24 +14,11 @@ jest.mock('react-native-safe-area-context', () => {
 });
 
 jest.mock('expo-localization', () => ({
-  getLocales: () => [{ languageTag: 'en-US' }],
+  getLocales: () => [{ languageTag: 'de-DE' }],
 }));
 
-jest.mock('expo-router', () => {
-  const React = require('react');
-  const { Text } = require('react-native');
-  return {
-    Link: ({ children, href, asChild }: { children: React.ReactNode; href?: string; asChild?: boolean }) =>
-      asChild ? children : React.createElement(Text, null, href),
-    router: { replace: jest.fn(), push: jest.fn() },
-    Redirect: () => null,
-    Stack: Object.assign(() => null, { Screen: () => null }),
-    Tabs: Object.assign(() => null, { Screen: () => null }),
-    useLocalSearchParams: () => ({}),
-  };
-});
-
 jest.mock('@react-native-async-storage/async-storage', () =>
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- jest mock bootstrap
   require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
 

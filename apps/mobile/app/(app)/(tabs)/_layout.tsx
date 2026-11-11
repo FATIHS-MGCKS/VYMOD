@@ -1,18 +1,37 @@
-import { Tabs, Redirect } from 'expo-router';
+import { Redirect, Tabs, useSegments } from 'expo-router';
 import React from 'react';
 
-import { canAccessVehicleDashboard } from '@/app/navigation/routePolicy';
+import {
+  canAccessVehicleTelemetryViews,
+  defaultRouteForSession,
+  isRestrictedAccountOnly,
+} from '@/app/navigation/authorization';
+import { useRevocationWatcher } from '@/app/navigation/useVehicleAccessGuard';
 import { useTheme } from '@/design-system/themes/ThemeProvider';
 import { useTranslation } from '@/localization/I18nProvider';
-import { useLifecycle } from '@/state/SessionProvider';
+import { useSession } from '@/state/SessionProvider';
 
 export default function TabsLayout() {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const lifecycle = useLifecycle();
+  const { session, initializing } = useSession();
+  const segments = useSegments();
 
-  if (!canAccessVehicleDashboard(lifecycle) && lifecycle !== 'SUSPENDED' && lifecycle !== 'REVOKED') {
-    return <Redirect href="/(onboarding)/approval-pending" />;
+  useRevocationWatcher();
+
+  if (initializing) {
+    return <Redirect href="/" />;
+  }
+
+  const leaf = segments[segments.length - 1];
+  const vehicleTabKeys = new Set(['index', 'location', 'intelligence', 'security']);
+
+  if (isRestrictedAccountOnly(session) && leaf && vehicleTabKeys.has(leaf)) {
+    return <Redirect href="/(app)/(tabs)/profile" />;
+  }
+
+  if (!canAccessVehicleTelemetryViews(session) && leaf && vehicleTabKeys.has(leaf)) {
+    return <Redirect href={defaultRouteForSession(session, false) as never} />;
   }
 
   return (

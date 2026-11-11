@@ -1,14 +1,14 @@
-# Governance — AUDIT_MANIFEST
+# client-mobile — AUDIT_MANIFEST
 
 | Phase | Status | Notes |
 | --- | --- | --- |
-| Repository audit | CONFIRMED | P0 merged to main (`7f4f584…`); P0A on PR #2 |
-| Production VPS audit | PRODUCTION_NOT_APPLICABLE | Not deployed |
-| Authority promotion | CONFIRMED | `AUTHORITY_ACTIVE` with mandatory file gate |
-| Graph registry | VALIDATED | `id_prefix` from `graph/schema.yaml` |
-| Function catalog | VALIDATED | Export/cli symbol checks (regex-based) |
+| Repository audit | CONFIRMED | P1 mobile foundation on PR #3 (`apps/mobile/`) |
+| Production VPS audit | PRODUCTION_NOT_APPLICABLE | App not deployed; no live telemetry/auth |
+| Authority promotion | AUDIT_IN_PROGRESS | Registry `AUDIT_IN_PROGRESS` until review promotes |
+| Graph registry | VALIDATED | `MOB-` prefix from `graph/schema.yaml` |
+| Function catalog | VALIDATED | Regex symbol checks against `apps/mobile/src` |
 
 | Evidence | ID | Path |
 | --- | --- | --- |
-| Unit tests | MOB-EVID-001 | `tools/client-mobile/tests/` |
-| CI workflow | MOB-EVID-002 | `.github/workflows/client-mobile.yml` |
+| Mobile Jest suites | MOB-EVID-001 | `apps/mobile/src/testing/*.test.tsx`, `apps/mobile/src/app/navigation/authorization.test.ts` |
+| CI mobile job | MOB-EVID-002 | `.github/workflows/governance.yml` (`jobs.mobile`) |

@@ -57,10 +57,7 @@ export function I18nProvider({ initialLocale, children }: I18nProviderProps) {
 export function useI18n(): I18nContextValue {
   const ctx = React.useContext(I18nContext);
   if (!ctx) {
-    return {
-      ...createRuntimeI18nAdapter(DEFAULT_LOCALE),
-      setLocale: () => undefined,
-    };
+    throw new Error('useI18n requires I18nProvider');
   }
   return ctx;
 }

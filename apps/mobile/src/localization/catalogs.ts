@@ -5,7 +5,7 @@ export type SupportedLocale = 'en-US' | 'de-DE';
 
 export const SUPPORTED_LOCALES: SupportedLocale[] = ['en-US', 'de-DE'];
 
-export const DEFAULT_LOCALE: SupportedLocale = 'en-US';
+export const DEFAULT_LOCALE: SupportedLocale = 'de-DE';
 
 export type MessageCatalog = Record<string, string>;
 

@@ -1,81 +1,43 @@
-# Governance — CHANGE_LEDGER (append-only)
+# client-mobile — CHANGE_LEDGER (append-only)
 
-## CHG-MOB-2026-11-11-P0A-001
-
-| Field | Value |
-| --- | --- |
-| **Date** | 2026-11-11 |
-| **PR** | #2 (open) |
-| **Code baseline** | `7f4f58430752f41829a02ea60f269b5a343a8c9e` (main at bootstrap) |
-| **Affected components** | MASTER_ARCHITECTURE, module authorities, module-authority validator |
-| **BEFORE** | P0 flat `architecture/` without per-module authorities |
-| **WHY** | SYNQDRIVE-style persistent module memory for agents |
-| **CHANGE** | Add client-mobile authority, graph, FUNCTION_CATALOG, module-authority validator |
-| **EXPECTED_EFFECT** | Agents route through MASTER_ARCHITECTURE and module READMEs |
-| **VALIDATION** | `npm run validate`, `npm test` |
-| **OBSERVED_EFFECT** | CI pass on PR #2 (34/34 tests pre-hardening) |
-| **NON_EFFECTS** | No application runtime; no Core integration; no production deploy |
-| **TRADEOFFS** | Shorter graph validator vs SYNQDRIVE full semantic checks |
-| **REMAINING_GAPS** | Planned modules remain `NOT_STARTED` authorities |
-| **Evidence** | MOB-EVID-001, MOB-EVID-002 |
-| **Validation status** | PROPOSED |
-
-## CHG-MOB-2026-11-11-P0A-002
-
-| Field | Value |
-| --- | --- |
-| **Date** | 2026-11-11 |
-| **PR** | #2 (open) |
-| **Code baseline** | `7fa00a88a789ec7a3761a94ae4e9bceb3673ebe7` (pre-hardening PR head) |
-| **Affected components** | module-graph-meta, knowledge-graph, function-catalog validators |
-| **BEFORE** | Hardcoded MOB-/I18N- graph prefix map |
-| **WHY** | Independent architecture review — dynamic module registration |
-| **CHANGE** | Derive `id_prefix` from `graph/schema.yaml`; strengthen graph and FUNCTION_CATALOG validation |
-| **EXPECTED_EFFECT** | New AUTHORITY_ACTIVE modules register via schema only |
-| **VALIDATION** | `npm run validate`, `npm test`, negative regression tests |
-| **OBSERVED_EFFECT** | pending CI on final commit |
-| **NON_EFFECTS** | No merge; no production validation |
-| **TRADEOFFS** | Export symbol check is regex-based, not full typechecker |
-| **REMAINING_GAPS** | Diff-to-module auto-sync remains REVIEW_REQUIRED |
-| **Evidence** | MOB-EVID-001 |
-| **Validation status** | PROPOSED |
-
-## CHG-MOB-2026-11-11-P0A-003
-
-| Field | Value |
-| --- | --- |
-| **Date** | 2026-11-11 |
-| **PR** | #2 (open) |
-| **Code baseline** | `13ced3c912fda9c591232ab74f757b0afef6b1d5` |
-| **Affected components** | `module-authority-hardening.test.mjs`, change-ledger validator, validator DI options |
-| **BEFORE** | Misleading negative tests; incomplete change-ledger field gate |
-| **WHY** | P0A negative evidence closeout |
-| **CHANGE** | Real fixture-based negative tests; `validateChangeLedgerText` required fields |
-| **EXPECTED_EFFECT** | CI proves validators reject malformed authority data |
-| **VALIDATION** | `npm test`, `npm run validate` |
-| **OBSERVED_EFFECT** | pending CI on final commit |
-| **NON_EFFECTS** | No architecture redesign; no product code |
-| **TRADEOFFS** | Temp-dir fixtures only in tests |
-| **REMAINING_GAPS** | Full TS export verification still REVIEW_REQUIRED |
-| **Evidence** | MOB-EVID-001 |
-| **Validation status** | PROPOSED |
+> **Note:** P0 governance validator history is recorded under `architecture/modules/governance/research/CHANGE_LEDGER.md`. Earlier copies mistakenly duplicated those entries here; they are superseded by the records below.
 
 ## CHG-MOB-2026-11-11-P1-001
 
 | Field | Value |
 | --- | --- |
 | **Date** | 2026-11-11 |
-| **PR** | TBD (P1 mobile foundation) |
-| **Code baseline** | `d2d0ec0aae4e05d6f67d46d854552e65e46732c0` |
+| **PR** | #3 |
+| **Code baseline** | `9180b01979411ee72be2d92cddd6248939c80e12` (pre-closeout head) |
 | **Affected components** | `apps/mobile/*`, client-mobile authority, CI mobile job |
-| **BEFORE** | No mobile app; registry NOT_STARTED |
-| **WHY** | VYMOD P1 executable foundation |
-| **CHANGE** | Expo SDK 58 app, screens, design system, mock session, tests, ADRs |
+| **BEFORE** | No mobile app; registry `NOT_STARTED` |
+| **WHY** | VYMOD P1 executable mobile foundation |
+| **CHANGE** | Expo SDK 58 app, screens, design system, mock session, component tests, JS export CI |
 | **EXPECTED_EFFECT** | Runnable dev app; governance + mobile CI green |
 | **VALIDATION** | `npm run validate`, `npm run test:all`, `expo export` |
-| **OBSERVED_EFFECT** | CONFIRMED locally |
-| **NON_EFFECTS** | No production deploy; no Core changes |
+| **OBSERVED_EFFECT** | CONFIRMED on PR #3 CI (4/4 checks) pre-architect closeout |
+| **NON_EFFECTS** | No production deploy; no Core/SYNQDRIVE/DIMO |
 | **TRADEOFFS** | Client-only route guards |
-| **REMAINING_GAPS** | AUTHORITY_ACTIVE promotion; native store builds |
-| **Evidence** | MOB-EVID-001 |
+| **REMAINING_GAPS** | `AUDIT_IN_PROGRESS`; server authZ; native store builds |
+| **Evidence** | MOB-EVID-001, MOB-EVID-002 |
+| **Validation status** | CONFIRMED |
+
+## CHG-MOB-2026-11-11-P1-002
+
+| Field | Value |
+| --- | --- |
+| **Date** | 2026-11-11 |
+| **PR** | #3 |
+| **Code baseline** | TBD (post closeout commit on `cursor/vymod-p1-mobile-foundation-1e89`) |
+| **Affected components** | `authorization.ts`, router layouts/guards, client-mobile authority, Jest router project |
+| **BEFORE** | Weaker route policy; mocked-router-only tests; copied governance authority text |
+| **WHY** | P1 security/navigation architect closeout (H1–H4) |
+| **CHANGE** | Fail-closed vehicle/session policy; Expo Router integration tests; factual module authority; de-DE default, AGENTS.md, EAS placeholder removed |
+| **EXPECTED_EFFECT** | Negative tests prove deep links and revocation; authority graph validates |
+| **VALIDATION** | `npm ci`, `npm run validate`, `npm test`, `npm run test:mobile`, typecheck, lint, expo-doctor, iOS/Android export |
+| **OBSERVED_EFFECT** | pending CI on final commit |
+| **NON_EFFECTS** | No merge/deploy; no live auth |
+| **TRADEOFFS** | Router integration isolated per test file due to global navigation ref |
+| **REMAINING_GAPS** | Production entitlement API; Link back navigation not covered in router harness |
+| **Evidence** | MOB-EVID-001, MOB-EVID-002, MOB-EVID-003 |
 | **Validation status** | PROPOSED |

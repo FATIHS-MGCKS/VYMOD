@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { useVehicleTelemetryGuard } from '@/app/navigation/useVehicleAccessGuard';
 import { View } from 'react-native';
 
 import { AppCard } from '@/design-system/components/AppCard';
@@ -17,6 +19,8 @@ const SECTIONS = [
 
 export default function IntelligenceScreen() {
   const { t } = useTranslation();
+  const guard = useVehicleTelemetryGuard();
+  if (guard) return guard;
 
   return (
     <AppScreen scroll>

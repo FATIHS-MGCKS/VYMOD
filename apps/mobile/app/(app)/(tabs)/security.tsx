@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { useVehicleTelemetryGuard } from '@/app/navigation/useVehicleAccessGuard';
 import { View } from 'react-native';
 
 import { AppButton } from '@/design-system/components/AppButton';
@@ -9,6 +11,8 @@ import { useTranslation } from '@/localization/I18nProvider';
 
 export default function SecurityScreen() {
   const { t } = useTranslation();
+  const guard = useVehicleTelemetryGuard();
+  if (guard) return guard;
 
   return (
     <AppScreen scroll>

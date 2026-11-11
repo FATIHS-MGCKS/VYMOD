@@ -1,5 +1,10 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
+import {
+  applyVehicleAccessRequest,
+  canCompleteMockVerification,
+  lifecycleFromSession,
+} from '@/app/navigation/authorization';
 import type { AccountLifecycleState, SessionSnapshot } from '@/domain/session';
 import {
   createActiveSession,
@@ -20,6 +25,8 @@ export interface SessionContextValue {
   completeMockVerification: () => void;
   submitVehicleRequest: (reference: string) => void;
   setDevScenario: (state: AccountLifecycleState) => void;
+  /** P1 test + revocation simulation — not a production API */
+  replaceSession: (session: SessionSnapshot) => void;
 }
 
 const SessionContext = createContext<SessionContextValue | null>(null);
@@ -42,6 +49,14 @@ export function SessionProvider({
     return () => clearTimeout(timer);
   }, [initializing]);
 
+  useEffect(() => {
+    if (initialSession === undefined) return;
+    queueMicrotask(() => {
+      setSession(initialSession);
+      setInitializing(false);
+    });
+  }, [initialSession]);
+
   const signIn = useCallback(async (email: string, password: string) => {
     await authRepo.signIn(email, password);
     setSession(createPendingVerificationSession(email));
@@ -62,16 +77,16 @@ export function SessionProvider({
   }, []);
 
   const completeMockVerification = useCallback(() => {
-    if (!session.account) return;
+    if (!canCompleteMockVerification(session) || !session.account) return;
     setSession(createPendingApprovalSession(session.account.email));
-  }, [session.account]);
+  }, [session]);
 
   const submitVehicleRequest = useCallback(
-    (_reference: string) => {
-      if (!session.account) return;
-      setSession(createPendingApprovalSession(session.account.email));
+    (reference: string) => {
+      const next = applyVehicleAccessRequest(session, reference);
+      if (next) setSession(next);
     },
-    [session.account],
+    [session],
   );
 
   const setDevScenario = useCallback(
@@ -104,6 +119,10 @@ export function SessionProvider({
     [session.account?.email],
   );
 
+  const replaceSession = useCallback((next: SessionSnapshot) => {
+    setSession(next);
+  }, []);
+
   const value = useMemo<SessionContextValue>(
     () => ({
       session,
@@ -114,6 +133,7 @@ export function SessionProvider({
       completeMockVerification,
       submitVehicleRequest,
       setDevScenario,
+      replaceSession,
     }),
     [
       session,
@@ -124,6 +144,7 @@ export function SessionProvider({
       completeMockVerification,
       submitVehicleRequest,
       setDevScenario,
+      replaceSession,
     ],
   );
 
@@ -140,6 +161,5 @@ export function useSession(): SessionContextValue {
 
 export function useLifecycle(): AccountLifecycleState {
   const { session, initializing } = useSession();
-  if (initializing) return 'INITIALIZING';
-  return session.lifecycle;
+  return lifecycleFromSession(session, initializing);
 }

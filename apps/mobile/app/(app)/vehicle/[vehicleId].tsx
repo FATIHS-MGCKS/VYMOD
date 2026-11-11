@@ -1,20 +1,17 @@
-import { Redirect, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
 
+import { useVehicleIdGuard } from '@/app/navigation/useVehicleAccessGuard';
 import { AppScreen } from '@/design-system/components/AppScreen';
 import { AppText } from '@/design-system/components/AppText';
-import { canAccessVehicleDashboard } from '@/app/navigation/routePolicy';
 import { useTranslation } from '@/localization/I18nProvider';
-import { useLifecycle } from '@/state/SessionProvider';
 
 export default function VehicleDetailScreen() {
   const { vehicleId } = useLocalSearchParams<{ vehicleId: string }>();
   const { t } = useTranslation();
-  const lifecycle = useLifecycle();
+  const guard = useVehicleIdGuard(vehicleId);
 
-  if (!canAccessVehicleDashboard(lifecycle)) {
-    return <Redirect href="/(app)/(tabs)/profile" />;
-  }
+  if (guard) return guard;
 
   return (
     <AppScreen>

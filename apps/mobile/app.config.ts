@@ -42,11 +42,6 @@ const config: ExpoConfig = {
   experiments: {
     typedRoutes: true,
   },
-  extra: {
-    eas: {
-      projectId: 'vymod-p1-local',
-    },
-  },
 };
 
 export default config;

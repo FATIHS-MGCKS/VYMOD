@@ -6,19 +6,23 @@ import { AppScreen } from '@/design-system/components/AppScreen';
 import { AppText } from '@/design-system/components/AppText';
 import { EmptyState } from '@/design-system/components/EmptyState';
 import { VehicleCard } from '@/design-system/components/VehicleCard';
-import { canAccessVehicleDashboard } from '@/app/navigation/routePolicy';
+import { canAccessVehicleTelemetryViews } from '@/app/navigation/authorization';
+import { useVehicleTelemetryGuard } from '@/app/navigation/useVehicleAccessGuard';
 import { DEMO_VEHICLE_ID } from '@/data/mocks/fixtures';
 import { useTranslation } from '@/localization/I18nProvider';
-import { useLifecycle } from '@/state/SessionProvider';
+import { useSession } from '@/state/SessionProvider';
 
 export default function DashboardScreen() {
   const { t } = useTranslation();
-  const lifecycle = useLifecycle();
+  const { session } = useSession();
+  const guard = useVehicleTelemetryGuard();
+
+  if (guard) return guard;
 
   return (
     <AppScreen scroll>
       <AppText variant="title">{t('dashboard.title')}</AppText>
-      {!canAccessVehicleDashboard(lifecycle) ? (
+      {!canAccessVehicleTelemetryViews(session) ? (
         <EmptyState title={t('dashboard.empty.title')} body={t('dashboard.empty.body')} />
       ) : (
         <View style={{ gap: 16 }}>

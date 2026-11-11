@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { useVehicleTelemetryGuard } from '@/app/navigation/useVehicleAccessGuard';
 import { View } from 'react-native';
 
 import { AppCard } from '@/design-system/components/AppCard';
@@ -10,6 +12,8 @@ import { useTranslation } from '@/localization/I18nProvider';
 export default function LocationScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const guard = useVehicleTelemetryGuard();
+  if (guard) return guard;
 
   return (
     <AppScreen scroll>

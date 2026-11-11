@@ -1,41 +1,54 @@
 nodes:
   - id: MOB-DOM-001
     type: domain
-    title: VYMOD client-mobile domain
+    title: VYMOD Expo mobile app
     epistemic_status: CONFIRMED
-    summary: Repository-wide validators, CI, and agent contracts.
+    summary: Consumer React Native shell under apps/mobile.
     source_paths:
-      - architecture/MASTER_ARCHITECTURE.md
-  - id: MOB-PIPE-001
-    type: pipeline
-    title: npm run validate
+      - apps/mobile/app/
+      - apps/mobile/src/
+  - id: MOB-NAV-001
+    type: policy
+    title: P1 client authorization policy
     epistemic_status: CONFIRMED
-    summary: Central client-mobile validation entrypoint.
+    summary: Session, verification, entitlement, and vehicle ID guards (not production authZ).
     source_paths:
-      - tools/client-mobile/run-all.mjs
-  - id: MOB-FN-001
+      - apps/mobile/src/app/navigation/authorization.ts
+  - id: MOB-SESS-001
     type: function
-    title: run-all orchestrator
+    title: Mock session provider
     epistemic_status: CONFIRMED
-    summary: Executes registered client-mobile checks.
+    summary: Guarded lifecycle transitions and dev scenarios.
     source_paths:
-      - tools/client-mobile/run-all.mjs
+      - apps/mobile/src/state/SessionProvider.tsx
+  - id: MOB-ROUTER-001
+    type: pipeline
+    title: Expo Router navigation shell
+    epistemic_status: CONFIRMED
+    summary: Public, onboarding, and protected app stacks with Stack.Protected.
+    source_paths:
+      - apps/mobile/app/
+      - apps/mobile/src/app/navigation/RootNavigationLayout.tsx
   - id: MOB-INV-001
     type: invariant
-    title: Fail-closed security posture
+    title: Fail-closed vehicle views
     epistemic_status: CONFIRMED
-    summary: Documented in SECURITY_INVARIANTS.md.
+    summary: Pre-active and restricted lifecycles cannot reach telemetry/vehicle detail routes.
     source_paths:
-      - architecture/SECURITY_INVARIANTS.md
+      - apps/mobile/src/app/navigation/authorization.ts
+      - apps/mobile/src/app/navigation/useVehicleAccessGuard.tsx
   - id: MOB-EVID-001
     type: evidence
-    title: Validator unit tests
+    title: Mobile Jest test suites
     epistemic_status: CONFIRMED
-    summary: Node and client-mobile unit tests in tools/client-mobile/tests.
+    summary: Authorization unit, component, and expo-router integration tests.
+    source_paths:
+      - apps/mobile/src/app/navigation/authorization.test.ts
+      - apps/mobile/src/testing/
   - id: MOB-EVID-002
     type: evidence
-    title: Governance GitHub Actions workflow
+    title: GitHub Actions mobile job
     epistemic_status: CONFIRMED
-    summary: GitHub Actions Governance workflow with gitleaks and npm validate.
+    summary: typecheck, lint, test:mobile, expo-doctor, JS exports.
     source_paths:
-      - .github/workflows/client-mobile.yml
+      - .github/workflows/governance.yml
