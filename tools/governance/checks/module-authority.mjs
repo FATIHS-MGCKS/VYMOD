@@ -5,7 +5,13 @@ import { parseModuleRegistry } from "./module-registry.mjs";
 import { readText } from "../lib/read.mjs";
 import { validateKnowledgeGraph } from "../lib/knowledge-graph.mjs";
 import { validateGraphNamespaceRegistry, readModuleGraphMeta } from "../lib/module-graph-meta.mjs";
-import { validateFunctionCatalog } from "../lib/function-catalog.mjs";
+import {
+  validateFunctionCatalog,
+  validateFunctionIdsGlobally,
+} from "../lib/function-catalog.mjs";
+import { validateChangeLedgerText, CHANGE_LEDGER_REQUIRED_FIELDS } from "../lib/change-ledger.mjs";
+
+export { validateChangeLedgerText, CHANGE_LEDGER_REQUIRED_FIELDS };
 
 const COVERAGE_ACTIVE = "AUTHORITY_ACTIVE";
 const COVERAGE_AUDIT = "AUDIT_IN_PROGRESS";
@@ -35,20 +41,6 @@ const AUTHORITY_ACTIVE_FILES = [
 
 const AUDIT_MINIMUM_FILES = ["README.md", "AUDIT_MANIFEST.md", "research/CHANGE_LEDGER.md"];
 
-const CHANGE_LEDGER_REQUIRED_FIELDS = [
-  "Date",
-  "PR",
-  "Code baseline",
-  "BEFORE",
-  "WHY",
-  "CHANGE",
-  "EXPECTED_EFFECT",
-  "VALIDATION",
-  "OBSERVED_EFFECT",
-  "Evidence",
-  "Validation status",
-];
-
 function authorityExists(rel) {
   return rel && rel !== "—" && fs.existsSync(fromRoot(rel));
 }
@@ -63,25 +55,9 @@ function checkAuthorityFiles(rel, files) {
 }
 
 function validateChangeLedger(rel) {
-  const errors = [];
   const ledger = fromRoot(path.join(rel, "research/CHANGE_LEDGER.md"));
-  if (!fs.existsSync(ledger)) return errors;
-  const text = readText(ledger);
-  const sections = text.split(/^## CHG-/gm).slice(1);
-  if (sections.length === 0) {
-    errors.push(`${rel}: CHANGE_LEDGER has no CHG-* entries`);
-    return errors;
-  }
-  const latest = sections[sections.length - 1];
-  for (const field of CHANGE_LEDGER_REQUIRED_FIELDS) {
-    if (!latest.includes(`**${field}**`)) {
-      errors.push(`${rel}: latest CHANGE_LEDGER entry missing **${field}**`);
-    }
-  }
-  if (latest.match(/\*\*Commit\*\*.*pending merge/i) && latest.includes("PRODUCTION_VALIDATED")) {
-    errors.push(`${rel}: CHANGE_LEDGER must not claim PRODUCTION_VALIDATED with pending merge`);
-  }
-  return errors;
+  if (!fs.existsSync(ledger)) return [];
+  return validateChangeLedgerText(readText(ledger), rel);
 }
 
 export function checkModuleAuthority() {
@@ -167,20 +143,13 @@ export function checkModuleAuthority() {
   );
   if (!ns.ok) errors.push(...ns.errors);
 
-  const globalFnIds = new Map();
-  for (const { authorityPath, idPrefix } of activeForGraph) {
-    const catalog = validateFunctionCatalog(authorityPath, idPrefix);
-    if (!catalog.ok) errors.push(...catalog.errors);
-    for (const fid of catalog.functionIds ?? []) {
-      if (globalFnIds.has(fid)) {
-        errors.push(
-          `Duplicate function ID ${fid} across modules ${globalFnIds.get(fid)} and ${authorityPath}`,
-        );
-      } else {
-        globalFnIds.set(fid, authorityPath);
-      }
-    }
-  }
+  const catalogInputs = activeForGraph.map(({ authorityPath, idPrefix }) => ({
+    authorityRel: authorityPath,
+    idPrefix,
+    markdown: readText(fromRoot(path.join(authorityPath, "FUNCTION_CATALOG.md"))),
+  }));
+  const globalCat = validateFunctionIdsGlobally(catalogInputs);
+  if (!globalCat.ok) errors.push(...globalCat.errors);
 
   return {
     id: "module-authority",

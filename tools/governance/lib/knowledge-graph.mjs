@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import yaml from "yaml";
-import { fromRoot } from "./paths.mjs";
+import { fromRoot, REPO_ROOT } from "./paths.mjs";
 
 export function loadYamlFile(absPath) {
   const raw = fs.readFileSync(absPath, "utf8");
@@ -11,39 +11,43 @@ export function loadYamlFile(absPath) {
 const EVIDENCE_TYPES = new Set(["evidence", "test_evidence"]);
 const REQUIRED_NODE_FIELDS = ["id", "type", "title", "epistemic_status", "summary"];
 
+function resolveRepoPath(relPath, root) {
+  return path.join(root, relPath);
+}
+
 /**
- * @param {string} authorityRel
+ * @param {object} docs
+ * @param {string} authorityRel label for errors
  * @param {string} idPrefix
  * @param {string} [expectedModule]
+ * @param {{ root?: string; checkSourcePaths?: boolean }} [options]
  */
-export function validateKnowledgeGraph(authorityRel, idPrefix, expectedModule) {
+export function validateKnowledgeGraphDocuments(
+  docs,
+  authorityRel,
+  idPrefix,
+  expectedModule,
+  options = {},
+) {
   const errors = [];
-  const authorityAbs = fromRoot(authorityRel);
-  const graphDir = path.join(authorityAbs, "graph");
+  const root = options.root ?? REPO_ROOT;
+  const checkSourcePaths = options.checkSourcePaths ?? root === REPO_ROOT;
 
-  let schema;
-  let nodesDoc;
-  let edgesDoc;
-  let invariantsDoc;
-  try {
-    schema = loadYamlFile(path.join(graphDir, "schema.yaml"));
-    nodesDoc = loadYamlFile(path.join(graphDir, "nodes.yaml"));
-    edgesDoc = loadYamlFile(path.join(graphDir, "edges.yaml"));
-    invariantsDoc = loadYamlFile(path.join(graphDir, "invariants.yaml"));
-  } catch (e) {
-    return { ok: false, errors: [`${authorityRel}: malformed graph YAML — ${e.message}`] };
-  }
+  const schema = docs.schema;
+  const nodesDoc = docs.nodes;
+  const edgesDoc = docs.edges;
+  const invariantsDoc = docs.invariants;
 
   if (!schema?.version) errors.push(`${authorityRel}: schema.yaml missing version`);
-  const allowedTypes = new Set(schema.node_types ?? []);
-  const allowedEpistemic = new Set(schema.epistemic_status_values ?? []);
-  const allowedRelations = new Set(schema.relation_types ?? []);
+  const allowedTypes = new Set(schema?.node_types ?? []);
+  const allowedEpistemic = new Set(schema?.epistemic_status_values ?? []);
+  const allowedRelations = new Set(schema?.relation_types ?? []);
 
-  if (schema.id_prefix !== idPrefix) {
-    errors.push(`${authorityRel}: schema id_prefix ${schema.id_prefix} !== expected ${idPrefix}`);
+  if (schema?.id_prefix !== idPrefix) {
+    errors.push(`${authorityRel}: schema id_prefix ${schema?.id_prefix} !== expected ${idPrefix}`);
   }
-  if (expectedModule && schema.module !== expectedModule) {
-    errors.push(`${authorityRel}: schema.module ${schema.module} !== ${expectedModule}`);
+  if (expectedModule && schema?.module !== expectedModule) {
+    errors.push(`${authorityRel}: schema.module ${schema?.module} !== ${expectedModule}`);
   }
 
   const nodes = nodesDoc?.nodes;
@@ -71,9 +75,11 @@ export function validateKnowledgeGraph(authorityRel, idPrefix, expectedModule) {
     if (!allowedEpistemic.has(n.epistemic_status)) {
       errors.push(`${authorityRel}: node ${n.id} invalid epistemic_status`);
     }
-    for (const sp of n.source_paths ?? []) {
-      if (!fs.existsSync(fromRoot(sp))) {
-        errors.push(`${authorityRel}: node ${n.id} missing source_path ${sp}`);
+    if (checkSourcePaths) {
+      for (const sp of n.source_paths ?? []) {
+        if (!fs.existsSync(resolveRepoPath(sp, root))) {
+          errors.push(`${authorityRel}: node ${n.id} missing source_path ${sp}`);
+        }
       }
     }
   }
@@ -121,13 +127,41 @@ export function validateKnowledgeGraph(authorityRel, idPrefix, expectedModule) {
           );
         }
       }
-      for (const sp of inv.source_paths ?? []) {
-        if (!fs.existsSync(fromRoot(sp))) {
-          errors.push(`${authorityRel}: invariant ${inv.id} missing source_path ${sp}`);
+      if (checkSourcePaths) {
+        for (const sp of inv.source_paths ?? []) {
+          if (!fs.existsSync(resolveRepoPath(sp, root))) {
+            errors.push(`${authorityRel}: invariant ${inv.id} missing source_path ${sp}`);
+          }
         }
       }
     }
   }
 
   return { ok: errors.length === 0, errors };
+}
+
+/**
+ * @param {string} authorityRel
+ * @param {string} idPrefix
+ * @param {string} [expectedModule]
+ * @param {{ root?: string; checkSourcePaths?: boolean }} [options]
+ */
+export function validateKnowledgeGraph(authorityRel, idPrefix, expectedModule, options = {}) {
+  const root = options.root ?? REPO_ROOT;
+  const authorityAbs = path.join(root, authorityRel);
+  const graphDir = path.join(authorityAbs, "graph");
+
+  let docs;
+  try {
+    docs = {
+      schema: loadYamlFile(path.join(graphDir, "schema.yaml")),
+      nodes: loadYamlFile(path.join(graphDir, "nodes.yaml")),
+      edges: loadYamlFile(path.join(graphDir, "edges.yaml")),
+      invariants: loadYamlFile(path.join(graphDir, "invariants.yaml")),
+    };
+  } catch (e) {
+    return { ok: false, errors: [`${authorityRel}: malformed graph YAML — ${e.message}`] };
+  }
+
+  return validateKnowledgeGraphDocuments(docs, authorityRel, idPrefix, expectedModule, options);
 }

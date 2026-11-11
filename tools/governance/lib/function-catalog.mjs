@@ -1,15 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fromRoot } from "./paths.mjs";
+import { fromRoot, REPO_ROOT } from "./paths.mjs";
 import { readText } from "./read.mjs";
 
 const FN_ID_RE = /^[A-Z][A-Z0-9]{1,7}-FN-\d{3}$/;
 
-/**
- * Parse markdown table rows after header into objects keyed by header names.
- * @param {string} markdown
- * @param {string} sectionHeading optional - only parse first table after heading
- */
 export function parseFunctionCatalogTable(markdown) {
   const lines = markdown.split("\n");
   const headerIdx = lines.findIndex((l) => l.includes("| ID |") && l.includes("| Status |"));
@@ -59,17 +54,15 @@ function exportSymbolExists(fileAbs, symbol) {
 }
 
 /**
- * @param {string} authorityRel
- * @param {string} idPrefix e.g. GOV-
+ * @param {string} markdown
+ * @param {string} idPrefix
+ * @param {{ root?: string; authorityRel?: string }} [options]
  */
-export function validateFunctionCatalog(authorityRel, idPrefix) {
-  const errors = [];
-  const catPath = fromRoot(path.join(authorityRel, "FUNCTION_CATALOG.md"));
-  if (!fs.existsSync(catPath)) {
-    return { ok: false, errors: [`${authorityRel}: missing FUNCTION_CATALOG.md`] };
-  }
+export function validateFunctionCatalogContent(markdown, idPrefix, options = {}) {
+  const root = options.root ?? REPO_ROOT;
+  const authorityRel = options.authorityRel ?? "fixture";
 
-  const markdown = readText(catPath);
+  const errors = [];
   const { rows } = parseFunctionCatalogTable(markdown);
   if (rows.length === 0) {
     errors.push(`${authorityRel}: FUNCTION_CATALOG.md has no function rows`);
@@ -97,7 +90,7 @@ export function validateFunctionCatalog(authorityRel, idPrefix) {
       errors.push(`${authorityRel}: ${id} ACTIVE without Source path`);
       continue;
     }
-    const abs = fromRoot(src);
+    const abs = path.isAbsolute(src) ? src : path.join(root, src);
     if (!fs.existsSync(abs)) {
       errors.push(`${authorityRel}: ${id} missing source file ${src}`);
       continue;
@@ -114,4 +107,47 @@ export function validateFunctionCatalog(authorityRel, idPrefix) {
   }
 
   return { ok: errors.length === 0, errors, functionIds: [...seenIds] };
+}
+
+/**
+ * @param {string} authorityRel
+ * @param {string} idPrefix
+ * @param {{ root?: string; markdown?: string }} [options]
+ */
+export function validateFunctionCatalog(authorityRel, idPrefix, options = {}) {
+  const root = options.root ?? REPO_ROOT;
+  const markdown =
+    options.markdown ??
+    readText(path.join(root, authorityRel, "FUNCTION_CATALOG.md"));
+  const catPath = path.join(root, authorityRel, "FUNCTION_CATALOG.md");
+  if (!options.markdown && !fs.existsSync(catPath)) {
+    return { ok: false, errors: [`${authorityRel}: missing FUNCTION_CATALOG.md`] };
+  }
+  return validateFunctionCatalogContent(markdown, idPrefix, { root, authorityRel });
+}
+
+/**
+ * @param {{ authorityRel: string; idPrefix: string; markdown: string }[]} catalogs
+ * @param {{ root?: string }} [options]
+ */
+export function validateFunctionIdsGlobally(catalogs, options = {}) {
+  const errors = [];
+  const globalFnIds = new Map();
+  const root = options.root ?? REPO_ROOT;
+
+  for (const { authorityRel, idPrefix, markdown } of catalogs) {
+    const catalog = validateFunctionCatalogContent(markdown, idPrefix, { root, authorityRel });
+    if (!catalog.ok) errors.push(...catalog.errors);
+    for (const fid of catalog.functionIds ?? []) {
+      if (globalFnIds.has(fid)) {
+        errors.push(
+          `Duplicate function ID ${fid} across modules ${globalFnIds.get(fid)} and ${authorityRel}`,
+        );
+      } else {
+        globalFnIds.set(fid, authorityRel);
+      }
+    }
+  }
+
+  return { ok: errors.length === 0, errors };
 }

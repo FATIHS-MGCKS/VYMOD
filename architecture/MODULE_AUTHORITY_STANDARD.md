@@ -66,9 +66,19 @@ Catalog **architecturally important** exports only (validators, public APIs, CLI
 
 ## 5. CHANGE_LEDGER.md (append-only)
 
-Each substantive change adds an entry with:
+Each substantive change adds an entry with (validated on latest entry when `AUTHORITY_ACTIVE`):
 
-`CHG-ID`, date, PR reference, commit SHA (when known), components, BEFORE, WHY, CHANGE, EXPECTED_EFFECT, VALIDATION, OBSERVED_EFFECT, NON_EFFECTS, TRADEOFFS, REMAINING_GAPS, evidence refs, validation status.
+| Field | Required |
+| --- | --- |
+| **Date** | yes |
+| **PR** | yes |
+| **Code baseline** | yes (known commit or explicit pending — never fabricated merge SHA) |
+| **Affected components** | yes |
+| **BEFORE** / **WHY** / **CHANGE** | yes |
+| **EXPECTED_EFFECT** / **VALIDATION** / **OBSERVED_EFFECT** | yes |
+| **NON_EFFECTS** / **TRADEOFFS** / **REMAINING_GAPS** | yes |
+| **Evidence** | yes |
+| **Validation status** | yes (do not claim `PRODUCTION_VALIDATED` without evidence) |
 
 ## 6. Knowledge graph rules
 

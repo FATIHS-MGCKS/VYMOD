@@ -39,3 +39,23 @@
 | **REMAINING_GAPS** | Diff-to-module auto-sync remains REVIEW_REQUIRED |
 | **Evidence** | GOV-EVID-001 |
 | **Validation status** | PROPOSED |
+
+## CHG-GOV-2026-11-11-P0A-003
+
+| Field | Value |
+| --- | --- |
+| **Date** | 2026-11-11 |
+| **PR** | #2 (open) |
+| **Code baseline** | `13ced3c912fda9c591232ab74f757b0afef6b1d5` |
+| **Affected components** | `module-authority-hardening.test.mjs`, change-ledger validator, validator DI options |
+| **BEFORE** | Misleading negative tests; incomplete change-ledger field gate |
+| **WHY** | P0A negative evidence closeout |
+| **CHANGE** | Real fixture-based negative tests; `validateChangeLedgerText` required fields |
+| **EXPECTED_EFFECT** | CI proves validators reject malformed authority data |
+| **VALIDATION** | `npm test`, `npm run validate` |
+| **OBSERVED_EFFECT** | pending CI on final commit |
+| **NON_EFFECTS** | No architecture redesign; no product code |
+| **TRADEOFFS** | Temp-dir fixtures only in tests |
+| **REMAINING_GAPS** | Full TS export verification still REVIEW_REQUIRED |
+| **Evidence** | GOV-EVID-001 |
+| **Validation status** | PROPOSED |
