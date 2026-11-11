@@ -10,7 +10,7 @@
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "test": "jest --runInBand",
+    "test": "jest --selectProjects unit --runInBand && jest --selectProjects router --runInBand",
     "export:ios": "expo export --platform ios",
     "export:android": "expo export --platform android"
   },
