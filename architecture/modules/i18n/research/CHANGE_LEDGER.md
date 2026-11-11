@@ -59,3 +59,23 @@
 | **REMAINING_GAPS** | Runtime adapter |
 | **Evidence** | I18N-EVID-001 |
 | **Validation status** | PROPOSED |
+
+## CHG-I18N-2026-11-11-P1-001
+
+| Field | Value |
+| --- | --- |
+| **Date** | 2026-11-11 |
+| **PR** | TBD (P1 mobile foundation) |
+| **Code baseline** | `d2d0ec0aae4e05d6f67d46d854552e65e46732c0` |
+| **Affected components** | `i18n/locales/*`, `apps/mobile/src/localization/*`, I18N-FN-099 |
+| **BEFORE** | Catalog-only i18n; no mobile runtime |
+| **WHY** | P1 requires real ICU runtime using authoritative catalogs |
+| **CHANGE** | Expanded de-DE/en-US keys; `createRuntimeI18nAdapter` + provider hooks |
+| **EXPECTED_EFFECT** | All mobile UI via `t()`; parity gate passes |
+| **VALIDATION** | `npm run validate`, `npm run test:mobile` |
+| **OBSERVED_EFFECT** | CONFIRMED locally |
+| **NON_EFFECTS** | No SYNQDRIVE/API integration |
+| **TRADEOFFS** | Keys normalized to lowercase segments for schema |
+| **REMAINING_GAPS** | RTL, store listing metadata legal review |
+| **Evidence** | I18N-EVID-001, mobile.foundation.test.tsx |
+| **Validation status** | PROPOSED |

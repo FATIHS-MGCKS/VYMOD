@@ -59,3 +59,23 @@
 | **REMAINING_GAPS** | Full TS export verification still REVIEW_REQUIRED |
 | **Evidence** | GOV-EVID-001 |
 | **Validation status** | PROPOSED |
+
+## CHG-GOV-2026-11-11-P1-001
+
+| Field | Value |
+| --- | --- |
+| **Date** | 2026-11-11 |
+| **PR** | TBD (P1 mobile foundation) |
+| **Code baseline** | `d2d0ec0aae4e05d6f67d46d854552e65e46732c0` |
+| **Affected components** | root `package.json` workspaces, `tsconfig.json`, `.github/workflows/governance.yml` |
+| **BEFORE** | typecheck/hardcoded-ui active but no app TS |
+| **WHY** | P1 introduces apps/mobile TSX |
+| **CHANGE** | Workspace scripts, mobile CI job, root typecheck |
+| **EXPECTED_EFFECT** | Gates execute on mobile sources |
+| **VALIDATION** | `npm run validate`, CI |
+| **OBSERVED_EFFECT** | CONFIRMED locally |
+| **NON_EFFECTS** | Validator logic unchanged |
+| **TRADEOFFS** | — |
+| **REMAINING_GAPS** | — |
+| **Evidence** | GOV-EVID-001 |
+| **Validation status** | PROPOSED |

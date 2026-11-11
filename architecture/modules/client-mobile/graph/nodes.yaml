@@ -1,0 +1,68 @@
+nodes:
+  - id: MOB-DOM-001
+    type: domain
+    title: VYMOD Expo mobile app
+    epistemic_status: CONFIRMED
+    summary: Consumer React Native shell; routes in apps/mobile/app only.
+    source_paths:
+      - apps/mobile/app/
+      - apps/mobile/src/
+  - id: MOB-NAV-001
+    type: policy
+    title: P1 client authorization policy
+    epistemic_status: CONFIRMED
+    summary: Session, verification, entitlement, and vehicle ID guards (not production authZ).
+    source_paths:
+      - apps/mobile/src/navigation/authorization.ts
+  - id: MOB-SESS-001
+    type: function
+    title: Mock session provider
+    epistemic_status: CONFIRMED
+    summary: Guarded lifecycle transitions and dev scenarios.
+    source_paths:
+      - apps/mobile/src/state/SessionProvider.tsx
+  - id: MOB-ROUTER-001
+    type: pipeline
+    title: Expo Router navigation shell
+    epistemic_status: CONFIRMED
+    summary: File routes under app/; stack in RootNavigationLayout.
+    source_paths:
+      - apps/mobile/app/
+      - apps/mobile/src/navigation/RootNavigationLayout.tsx
+  - id: MOB-GATE-001
+    type: pipeline
+    title: Expo route root gate
+    epistemic_status: CONFIRMED
+    summary: Fails CI if src/app collides or required routes missing.
+    source_paths:
+      - tools/governance/checks/expo-route-root.mjs
+  - id: MOB-INV-001
+    type: invariant
+    title: Fail-closed vehicle views
+    epistemic_status: CONFIRMED
+    summary: Pre-active and restricted lifecycles cannot reach telemetry/vehicle detail routes.
+    source_paths:
+      - apps/mobile/src/navigation/authorization.ts
+      - apps/mobile/src/navigation/useVehicleAccessGuard.tsx
+  - id: MOB-EVID-001
+    type: evidence
+    title: Mobile Jest test suites
+    epistemic_status: CONFIRMED
+    summary: Authorization unit, component, and expo-router integration tests.
+    source_paths:
+      - apps/mobile/src/navigation/authorization.test.ts
+      - apps/mobile/src/testing/
+  - id: MOB-EVID-002
+    type: evidence
+    title: GitHub Actions mobile job
+    epistemic_status: CONFIRMED
+    summary: typecheck, lint, test:mobile, expo-doctor, exports, route-root gate.
+    source_paths:
+      - .github/workflows/governance.yml
+  - id: MOB-EVID-004
+    type: evidence
+    title: Route root validator tests
+    epistemic_status: CONFIRMED
+    summary: Negative fixture for src/app collision.
+    source_paths:
+      - tools/governance/tests/expo-route-root.test.mjs

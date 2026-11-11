@@ -33,12 +33,12 @@ Central module inventory. **Implementation** `Status` is separate from **Registr
 
 ## `client-mobile`
 
-- **Path:** `apps/mobile/` (not created in P0)
-- **Authority path:** `—`
+- **Path:** `apps/mobile/`
+- **Authority path:** `architecture/modules/client-mobile/`
 - **Owner:** `@vymod-client`
-- **Status:** `PLANNED`
-- **Registry coverage status:** `NOT_STARTED`
-- **Scope:** Consumer mobile app, MASVS-aligned
+- **Status:** `SCAFFOLD`
+- **Registry coverage status:** `AUDIT_IN_PROGRESS`
+- **Scope:** Consumer mobile app, MASVS-aligned (P1 foundation)
 
 ## `client-web`
 

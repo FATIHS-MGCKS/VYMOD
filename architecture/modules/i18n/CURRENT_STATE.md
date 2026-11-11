@@ -9,9 +9,9 @@
 - Validators: `checkI18n`, `validateI18nCatalogs`, `parseIcuMessage`, JSX hardcoded analyzer (shared)
 - Authority: `architecture/modules/i18n/`
 
-## NOT_IMPLEMENTED
+## P1 runtime (CONFIRMED in PR)
 
-- `I18N-FN-099` runtime UI adapter (see FUNCTION_CATALOG)
+- `I18N-FN-099` — `createRuntimeI18nAdapter` in `apps/mobile/src/localization/runtimeI18nAdapter.ts` (root catalogs, ICU, no silent fallback)
 
 ## Privacy
 

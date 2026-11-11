@@ -34,3 +34,43 @@ jobs:
         run: npm run validate
       - name: Validator unit tests
         run: npm test
+
+  mobile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint mobile
+        run: npm run lint
+      - name: Mobile unit tests
+        run: npm run test:mobile
+      - name: Expo doctor
+        working-directory: apps/mobile
+        run: npx expo-doctor
+      - name: Expo route root gate
+        run: node tools/governance/checks/run-expo-route-root-cli.mjs
+      - name: Export iOS bundle
+        working-directory: apps/mobile
+        run: |
+          set -o pipefail
+          npx expo export --platform ios --output-dir /tmp/vymod-export-ios 2>&1 | tee /tmp/vymod-export-ios.log
+          if grep -q 'Using src/app as the root directory' /tmp/vymod-export-ios.log; then
+            echo 'Expo Router selected src/app instead of app/'
+            exit 1
+          fi
+      - name: Export Android bundle
+        working-directory: apps/mobile
+        run: |
+          set -o pipefail
+          npx expo export --platform android --output-dir /tmp/vymod-export-android 2>&1 | tee /tmp/vymod-export-android.log
+          if grep -q 'Using src/app as the root directory' /tmp/vymod-export-android.log; then
+            echo 'Expo Router selected src/app instead of app/'
+            exit 1
+          fi

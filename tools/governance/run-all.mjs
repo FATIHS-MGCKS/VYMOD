@@ -9,6 +9,7 @@ import { checkSecrets } from "./checks/secrets.mjs";
 import { checkDependencyAudit } from "./checks/dependency-audit.mjs";
 import { checkTypecheck } from "./checks/typecheck.mjs";
 import { checkModuleAuthority } from "./checks/module-authority.mjs";
+import { checkExpoRouteRoot } from "./checks/expo-route-root.mjs";
 
 const CHECKS = [
   { id: "required-files", run: checkRequiredFiles },
@@ -16,6 +17,7 @@ const CHECKS = [
   { id: "doc-links", run: checkDocLinks, aliasOf: "docs" },
   { id: "module-registry", run: checkModuleRegistry },
   { id: "module-authority", run: checkModuleAuthority },
+  { id: "expo-route-root", run: () => checkExpoRouteRoot({ skipExportProbe: true }) },
   { id: "i18n", run: checkI18n },
   { id: "hardcoded-ui", run: checkHardcodedUi },
   { id: "secrets", run: checkSecrets },

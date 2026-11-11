@@ -1,14 +1,22 @@
 {
   "name": "vymod",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
-  "description": "VYMOD governance and validation (P0)",
+  "description": "VYMOD — consumer vehicle intelligence (governance + mobile P1)",
   "type": "module",
+  "workspaces": [
+    "apps/*"
+  ],
   "scripts": {
     "validate": "node tools/governance/run-all.mjs",
     "validate:i18n": "node tools/governance/run-all.mjs --only i18n",
     "validate:docs": "node tools/governance/run-all.mjs --only docs",
-    "test": "node --test tools/governance/tests/*.test.mjs"
+    "test": "node --test tools/governance/tests/*.test.mjs",
+    "test:mobile": "npm run test --workspace @vymod/mobile",
+    "test:all": "npm test && npm run test:mobile",
+    "typecheck": "npm run typecheck --workspace @vymod/mobile",
+    "lint": "npm run lint --workspace @vymod/mobile",
+    "mobile:start": "npm run start --workspace @vymod/mobile"
   },
   "engines": {
     "node": ">=20"
