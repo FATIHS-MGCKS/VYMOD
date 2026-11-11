@@ -55,7 +55,7 @@ jobs:
         working-directory: apps/mobile
         run: npx expo-doctor
       - name: Expo route root gate
-        run: node --input-type=module -e "import { checkExpoRouteRoot } from './tools/governance/checks/expo-route-root.mjs'; const r = checkExpoRouteRoot({ skipExportProbe: true }); if (r.status !== 'pass') { r.errors.forEach((e) => console.error(e)); process.exit(1); }"
+        run: node tools/governance/checks/run-expo-route-root-cli.mjs
       - name: Export iOS bundle
         working-directory: apps/mobile
         run: |
