@@ -41,3 +41,23 @@
 | **REMAINING_GAPS** | Production entitlement API; Link back navigation not covered in router harness |
 | **Evidence** | MOB-EVID-001, MOB-EVID-002, MOB-EVID-003 |
 | **Validation status** | PROPOSED |
+
+## CHG-MOB-2026-11-11-P1-003
+
+| Field | Value |
+| --- | --- |
+| **Date** | 2026-11-11 |
+| **PR** | #3 |
+| **Code baseline** | `6733e6cfa506a260396617feef9156e1ae4b1ae1` (pre-hygiene head) |
+| **Affected components** | Jest harness, SessionProvider, client-mobile FUNCTION_CATALOG |
+| **BEFORE** | Router test act warnings; public `replaceSession`; non-standard catalog table |
+| **WHY** | P1 final test hygiene and mock boundary closeout |
+| **CHANGE** | IS_REACT_ACT_ENVIRONMENT; integration +not-found route; session remount bridge; remove replaceSession; catalog P0A columns; setDevScenario regression test |
+| **EXPECTED_EFFECT** | Cleaner CI logs; no unguarded mock session API in app context |
+| **VALIDATION** | `npm ci`, `npm run validate`, `npm run test:mobile` |
+| **OBSERVED_EFFECT** | pending CI on final commit |
+| **NON_EFFECTS** | No product features; no merge |
+| **TRADEOFFS** | Router revocation uses provider remount key |
+| **REMAINING_GAPS** | Optional Expo Router Link back-path coverage |
+| **Evidence** | MOB-EVID-001, MOB-EVID-002 |
+| **Validation status** | PROPOSED |

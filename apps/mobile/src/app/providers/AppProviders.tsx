@@ -11,16 +11,21 @@ export function AppProviders({
   children,
   initialSession,
   initialLocale,
+  sessionProviderKey,
 }: {
   children: React.ReactNode;
   initialSession?: SessionSnapshot;
   initialLocale?: SupportedLocale;
+  /** Integration tests remount session when simulating revocation */
+  sessionProviderKey?: number;
 }) {
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <I18nProvider initialLocale={initialLocale}>
         <ThemeProvider>
-          <SessionProvider initialSession={initialSession}>{children}</SessionProvider>
+          <SessionProvider key={sessionProviderKey ?? 'default'} initialSession={initialSession}>
+            {children}
+          </SessionProvider>
         </ThemeProvider>
       </I18nProvider>
     </SafeAreaProvider>

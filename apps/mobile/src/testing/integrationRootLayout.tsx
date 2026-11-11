@@ -5,29 +5,37 @@ import { RootNavigationLayout } from '@/app/navigation/RootNavigationLayout';
 import { createSignedOutSession } from '@/data/mocks/fixtures';
 import type { SessionSnapshot } from '@/domain/session';
 
-type SessionSetter = React.Dispatch<React.SetStateAction<SessionSnapshot>>;
+type IntegrationSessionSetter = (next: SessionSnapshot) => void;
 
 declare global {
   // eslint-disable-next-line no-var
   var __vymodBootstrapSession: SessionSnapshot | undefined;
   // eslint-disable-next-line no-var
-  var __vymodSetSession: SessionSetter | undefined;
+  var __vymodSetSession: IntegrationSessionSetter | undefined;
 }
 
 export function IntegrationRootLayout() {
   const [session, setSession] = useState(
     globalThis.__vymodBootstrapSession ?? createSignedOutSession(),
   );
+  const [sessionProviderKey, setSessionProviderKey] = useState(0);
 
   useEffect(() => {
-    globalThis.__vymodSetSession = setSession;
+    globalThis.__vymodSetSession = (next: SessionSnapshot) => {
+      setSession(next);
+      setSessionProviderKey((key) => key + 1);
+    };
     return () => {
       delete globalThis.__vymodSetSession;
     };
   }, []);
 
   return (
-    <AppProviders initialSession={session} initialLocale="en-US">
+    <AppProviders
+      initialSession={session}
+      initialLocale="en-US"
+      sessionProviderKey={sessionProviderKey}
+    >
       <RootNavigationLayout />
     </AppProviders>
   );

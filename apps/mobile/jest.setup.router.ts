@@ -1,4 +1,5 @@
 Object.defineProperty(global, '__DEV__', { value: false, configurable: true });
+Object.defineProperty(globalThis, 'IS_REACT_ACT_ENVIRONMENT', { value: true, writable: true });
 
 jest.mock('expo-localization', () => ({
   getLocales: () => [{ languageTag: 'de-DE' }],

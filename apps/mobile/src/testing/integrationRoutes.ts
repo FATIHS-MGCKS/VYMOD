@@ -19,4 +19,5 @@ export const integrationRouteMap = {
   '(app)/(tabs)/security': require('../../app/(app)/(tabs)/security').default,
   '(app)/(tabs)/profile': require('../../app/(app)/(tabs)/profile').default,
   '(app)/vehicle/[vehicleId]': require('../../app/(app)/vehicle/[vehicleId]').default,
+  '+not-found': require('../../app/+not-found').default,
 } as const;

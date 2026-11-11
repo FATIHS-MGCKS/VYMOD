@@ -15,7 +15,7 @@
 - Mock session lifecycle in `SessionProvider` (no HTTP)
 - Design system components + dark/light theme
 - Root catalog i18n (`de-DE` default/fallback, user locale switch)
-- Jest: unit authorization tests, component tests, Expo Router integration tests (28 scenarios)
+- Jest: unit authorization + session boundary tests, component tests, Expo Router integration tests (30 scenarios)
 
 ## Not implemented (by design)
 

@@ -10,7 +10,11 @@ module.exports = {
       displayName: 'unit',
       preset: 'jest-expo',
       setupFilesAfterEnv: ['<rootDir>/src/testing/jest.setup.ts'],
-      testMatch: ['<rootDir>/src/**/*.test.ts', '<rootDir>/src/testing/mobile.foundation.test.tsx'],
+      testMatch: [
+        '<rootDir>/src/**/*.test.ts',
+        '<rootDir>/src/state/SessionProvider.test.tsx',
+        '<rootDir>/src/testing/mobile.foundation.test.tsx',
+      ],
       moduleNameMapper: { '^@/(.*)$': '<rootDir>/src/$1' },
       transformIgnorePatterns,
     },

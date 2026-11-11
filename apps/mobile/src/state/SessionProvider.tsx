@@ -25,8 +25,6 @@ export interface SessionContextValue {
   completeMockVerification: () => void;
   submitVehicleRequest: (reference: string) => void;
   setDevScenario: (state: AccountLifecycleState) => void;
-  /** P1 test + revocation simulation — not a production API */
-  replaceSession: (session: SessionSnapshot) => void;
 }
 
 const SessionContext = createContext<SessionContextValue | null>(null);
@@ -40,7 +38,9 @@ export function SessionProvider({
   children: React.ReactNode;
   initialSession?: SessionSnapshot;
 }) {
-  const [session, setSession] = useState<SessionSnapshot>(initialSession ?? createSignedOutSession());
+  const [session, setSession] = useState<SessionSnapshot>(
+    () => initialSession ?? createSignedOutSession(),
+  );
   const [initializing, setInitializing] = useState(initialSession === undefined);
 
   useEffect(() => {
@@ -48,14 +48,6 @@ export function SessionProvider({
     const timer = setTimeout(() => setInitializing(false), 0);
     return () => clearTimeout(timer);
   }, [initializing]);
-
-  useEffect(() => {
-    if (initialSession === undefined) return;
-    queueMicrotask(() => {
-      setSession(initialSession);
-      setInitializing(false);
-    });
-  }, [initialSession]);
 
   const signIn = useCallback(async (email: string, password: string) => {
     await authRepo.signIn(email, password);
@@ -119,10 +111,6 @@ export function SessionProvider({
     [session.account?.email],
   );
 
-  const replaceSession = useCallback((next: SessionSnapshot) => {
-    setSession(next);
-  }, []);
-
   const value = useMemo<SessionContextValue>(
     () => ({
       session,
@@ -133,7 +121,6 @@ export function SessionProvider({
       completeMockVerification,
       submitVehicleRequest,
       setDevScenario,
-      replaceSession,
     }),
     [
       session,
@@ -144,7 +131,6 @@ export function SessionProvider({
       completeMockVerification,
       submitVehicleRequest,
       setDevScenario,
-      replaceSession,
     ],
   );
 
