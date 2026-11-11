@@ -14,10 +14,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install gitleaks
+        run: |
+          curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v8.22.0/gitleaks_8.22.0_linux_x64.tar.gz" -o gitleaks.tgz
+          tar -xf gitleaks.tgz gitleaks
+          sudo install -m 0755 gitleaks /usr/local/bin/gitleaks
+          gitleaks version
       - name: Governance validators
+        env:
+          CI: "true"
         run: npm run validate
       - name: Validator unit tests
         run: npm test
