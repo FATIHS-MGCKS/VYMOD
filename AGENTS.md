@@ -58,8 +58,8 @@ Read the relevant authorities **before** implementation. Do not duplicate long r
 3. Sync `MODULE_REGISTRY.md` only when coverage or paths actually change.
 4. Report **failed**, **skipped**, and **NOT_IMPLEMENTED** checks explicitly.
 5. Update architecture/compliance docs for substantive changes.
-4. Include privacy and security impact notes in the completion report.
-5. Never claim **IMPLEMENTED** or **VERIFIED** without evidence.
+6. Include privacy and security impact notes in the completion report.
+7. Never claim **IMPLEMENTED** or **VERIFIED** without evidence.
 
 ## Prohibited agent behavior
 
