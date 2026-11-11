@@ -9,11 +9,13 @@ globs:
 
 # Architecture
 
-Read `architecture/SYSTEM_OVERVIEW.md` and `architecture/MODULE_REGISTRY.md` before structural changes.
+Read `architecture/MASTER_ARCHITECTURE.md`, then `architecture/MODULE_REGISTRY.md`, before structural changes.
 
-- VYMOD is consumer-facing; Core interfaces are versioned and explicit (`architecture/integrations/`).
-- Document substantive decisions in `architecture/decisions/`.
-- No unrestricted cross-product data access.
-- P0: integration **documentation only**, not live DIMO/SYNQDRIVE wiring.
+- Check **Registry coverage status**; read `architecture/modules/<id>/` when `AUTHORITY_ACTIVE`.
+- `SYSTEM_OVERVIEW.md` remains the logical system description; do not duplicate module detail in PR prose.
+- Document substantive cross-cutting decisions in `architecture/decisions/`.
+- Substantive changes: update module `CHANGE_LEDGER.md`, `CURRENT_STATE.md`, and registry metadata when applicable.
+- VYMOD is consumer-facing; Core interfaces are versioned (`architecture/integrations/`).
+- No live DIMO/SYNQDRIVE wiring without separate authorization.
 
 Owners in MODULE_REGISTRY must approve boundary changes.

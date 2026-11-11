@@ -33,7 +33,8 @@ export function parseModuleRegistry(text) {
 
     const body = chunk.slice(nameEnd + 1);
     const fields = {};
-    const re = /^- \*\*(Owner|Path|Status):\*\*\s*(.+)$/gm;
+    const re =
+      /^- \*\*(Owner|Path|Authority path|Status|Registry coverage status):\*\*\s*(.+)$/gm;
     let m;
     while ((m = re.exec(body)) !== null) {
       fields[m[1]] = m[2].trim().replace(/^`|`$/g, "");
@@ -53,7 +54,7 @@ export function checkModuleRegistry() {
   if (modules.length === 0) errors.push("No modules found in MODULE_REGISTRY");
 
   for (const mod of modules) {
-    for (const key of ["Owner", "Path", "Status"]) {
+    for (const key of ["Owner", "Path", "Authority path", "Status", "Registry coverage status"]) {
       if (!mod.fields[key]) {
         errors.push(`Module \`${mod.name}\` missing **${key}:**`);
       }

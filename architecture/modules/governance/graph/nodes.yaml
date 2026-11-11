@@ -1,0 +1,39 @@
+nodes:
+  - id: GOV-DOM-001
+    type: domain
+    title: VYMOD governance domain
+    epistemic_status: CONFIRMED
+    summary: Repository-wide validators, CI, and agent contracts.
+    source_paths:
+      - architecture/MASTER_ARCHITECTURE.md
+  - id: GOV-PIPE-001
+    type: pipeline
+    title: npm run validate
+    epistemic_status: CONFIRMED
+    summary: Central governance validation entrypoint.
+    source_paths:
+      - tools/governance/run-all.mjs
+  - id: GOV-FN-001
+    type: function
+    title: run-all orchestrator
+    epistemic_status: CONFIRMED
+    summary: Executes registered governance checks.
+    source_paths:
+      - tools/governance/run-all.mjs
+  - id: GOV-INV-001
+    type: invariant
+    title: Fail-closed security posture
+    epistemic_status: CONFIRMED
+    summary: Documented in SECURITY_INVARIANTS.md.
+    source_paths:
+      - architecture/SECURITY_INVARIANTS.md
+  - id: GOV-EVID-001
+    type: evidence
+    title: Validator unit tests
+    epistemic_status: CONFIRMED
+  - id: GOV-EVID-002
+    type: evidence
+    title: Governance GitHub Actions workflow
+    epistemic_status: CONFIRMED
+    source_paths:
+      - .github/workflows/governance.yml

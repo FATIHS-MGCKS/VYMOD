@@ -8,12 +8,14 @@ import { checkHardcodedUi } from "./checks/hardcoded-ui.mjs";
 import { checkSecrets } from "./checks/secrets.mjs";
 import { checkDependencyAudit } from "./checks/dependency-audit.mjs";
 import { checkTypecheck } from "./checks/typecheck.mjs";
+import { checkModuleAuthority } from "./checks/module-authority.mjs";
 
 const CHECKS = [
   { id: "required-files", run: checkRequiredFiles },
   { id: "cursor-rules", run: checkCursorRules },
   { id: "doc-links", run: checkDocLinks, aliasOf: "docs" },
   { id: "module-registry", run: checkModuleRegistry },
+  { id: "module-authority", run: checkModuleAuthority },
   { id: "i18n", run: checkI18n },
   { id: "hardcoded-ui", run: checkHardcodedUi },
   { id: "secrets", run: checkSecrets },

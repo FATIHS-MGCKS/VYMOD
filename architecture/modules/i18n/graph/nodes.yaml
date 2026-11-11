@@ -1,0 +1,32 @@
+nodes:
+  - id: I18N-DOM-001
+    type: domain
+    title: VYMOD i18n domain
+    epistemic_status: CONFIRMED
+    summary: de-DE and en-US JSON catalogs with CI parity.
+    source_paths:
+      - i18n/locales/de-DE.json
+      - i18n/locales/en-US.json
+  - id: I18N-DATA-001
+    type: data
+    title: Locale catalogs
+    epistemic_status: CONFIRMED
+    source_paths:
+      - i18n/locales/
+  - id: I18N-PIPE-001
+    type: pipeline
+    title: checkI18n validator
+    epistemic_status: CONFIRMED
+    source_paths:
+      - tools/governance/checks/i18n.mjs
+  - id: I18N-INV-001
+    type: invariant
+    title: Locale key parity
+    epistemic_status: CONFIRMED
+    summary: de-DE and en-US must share keys and placeholders.
+  - id: I18N-EVID-001
+    type: evidence
+    title: i18n negative tests
+    epistemic_status: CONFIRMED
+    source_paths:
+      - tools/governance/tests/i18n-negative.test.mjs
